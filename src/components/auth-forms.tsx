@@ -20,6 +20,7 @@ export function LoginForm({ success }: { success?: string }) {
       <Feedback state={state} /><button className="button primary full" disabled={pending} type="submit"><span>{pending ? 'Entrando…' : 'Entrar'}</span><Icon name="arrow" /></button>
     </form>
     <div className="auth-secondary">Primeiro acesso? <Link href="/ativar">Ativar com código</Link></div>
+    <Link href="/beta" className="beta-entry"><Icon name="grid" size={17} /><span>Explorar versão beta<small>Sem senha · dados de demonstração</small></span><Icon name="arrow" size={17} /></Link>
   </>;
 }
 export function CodeForm({ kind }: { kind: 'activate' | 'reset' }) {

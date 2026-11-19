@@ -8,6 +8,8 @@ Data: 19/11/2026.
 - Normalização de usuário: sufixo permitido, rejeição de domínios não previstos e entradas inválidas.
 - Código: preservação do comprimento/alfabeto e aceitação de colagem com separadores.
 - Senha: tamanho mínimo/máximo e composição exigida.
+- Beta: entrega independente de uma peça do mesmo paciente, necessidade de recebimento antes da entrega, justificativa para revisão e visão limitada ao laboratório de demonstração.
+- Formato de usuário: `suporte@cpe.ceoclub`, identificador simples e compatibilidade com o sufixo anterior.
 
 ## Integração no Supabase
 
@@ -20,6 +22,7 @@ Dados sintéticos de duas clínicas, equipe e laboratório foram usados para tes
 - Bloqueio de geração de códigos por equipe e recuperação de conta de outra clínica.
 - Rejeição de código expirado, reutilizado e de finalidade incorreta.
 - Recuperação de senha por código e bloqueio das sessões anteriores.
+- Ativação real com o novo sufixo `@cpe.ceoclub`, seguida de login e leitura do perfil protegido, usando conta sintética removida após a validação.
 
 ## Navegador — pendente após publicação
 

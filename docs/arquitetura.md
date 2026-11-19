@@ -36,7 +36,7 @@ As tabelas de negócio possuem acesso de leitura por RLS. O CRUD operacional de 
 
 ## Acessos e códigos
 
-O identificador visível é um usuário, opcionalmente com sufixo `@ceoclubcpe`. Internamente, o Supabase Auth utiliza um identificador de e-mail técnico; não envia e-mail de ativação ou recuperação. A identidade real é confirmada pela senha e pelo código emitido pelo responsável.
+O identificador visível é um usuário, com sufixo comercial `@cpe.ceoclub`. O identificador simples e o sufixo anterior `@ceoclubcpe` continuam aceitos para compatibilidade. Internamente, o Supabase Auth utiliza um identificador de e-mail técnico; não envia e-mail de ativação ou recuperação. A identidade real é confirmada pela senha e pelo código emitido pelo responsável.
 
 Os códigos têm 128 bits aleatórios, são armazenados somente como SHA-256, vinculados a usuário/clínica/perfil/finalidade e utilizados mediante reserva atômica. A reemissão revoga o código anterior da mesma finalidade. Ativação dura 24 horas; recuperação dura 15 minutos. Tentativas de resgate são limitadas a 12 por janela de 15 minutos por origem identificada pelo gateway.
 

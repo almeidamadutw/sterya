@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { normalizeUsername, normalizeCode, passwordError } from '../src/lib/validation.ts';
 test('username supports the product alias without accepting arbitrary email domains', () => {
   assert.equal(normalizeUsername('  Ana.Silva@ceoclubcpe  '), 'ana.silva');
-  for (const name of ['ab', 'ana@example.com', '../admin', 'ana@ceoclubcpe.evil', 'a'.repeat(41), 'ana silva']) assert.equal(normalizeUsername(name), null);
+  assert.equal(normalizeUsername('  Suporte@CPE.CEOCLUB  '), 'suporte');
+  for (const name of ['ab', 'ana@example.com', '../admin', 'ana@ceoclubcpe.evil', 'suporte@cpe.ceoclub.evil', 'a'.repeat(41), 'ana silva']) assert.equal(normalizeUsername(name), null);
 });
 test('paste-friendly codes keep full 128-bit entropy', () => {
   assert.equal(normalizeCode('abcd-1234-ABCD-1234-abcd-1234-abcd-1234'), 'ABCD1234ABCD1234ABCD1234ABCD1234');

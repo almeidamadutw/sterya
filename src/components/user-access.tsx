@@ -2,13 +2,13 @@
 import { useActionState, useState } from 'react';
 import { issueCode } from '@/app/actions/auth';
 import { Icon } from '@/components/icon';
-import { roleNames } from '@/lib/validation';
+import { roleNames, displayUsername } from '@/lib/validation';
 type Person = { id: string; username: string; full_name: string; role: string; active: boolean };
 type Lab = { id: string; name: string };
 function CodeResult({ code, username, expiresAt, kind }: { code: string; username?: string; expiresAt?: string; kind?: string }) {
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
-  return <div className="code-result" role="status"><strong>Código {kind === 'reset' ? 'de recuperação' : 'de ativação'} gerado</strong><p>Usuário: <b>{username}</b></p><input aria-label="Código gerado" value={code} readOnly onFocus={event => event.target.select()} /><button type="button" className="button secondary" onClick={async () => { try { await navigator.clipboard.writeText(code); setCopied(true); setCopyError(false); } catch { setCopyError(true); } }}><Icon name="copy" size={16} />{copied ? 'Copiado!' : 'Copiar código'}</button>{copyError && <small>Selecione o código acima e copie manualmente.</small>}<small>Válido até {expiresAt ? new Date(expiresAt).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'short', timeStyle: 'short' }) : 'o prazo informado'} (horário de Brasília). Uso único.</small><small>Envie o usuário e o código diretamente à pessoa. O código aparece somente nesta geração.</small></div>;
+  return <div className="code-result" role="status"><strong>Código {kind === 'reset' ? 'de recuperação' : 'de ativação'} gerado</strong><p>Usuário: <b>{username ? displayUsername(username) : ''}</b></p><input aria-label="Código gerado" value={code} readOnly onFocus={event => event.target.select()} /><button type="button" className="button secondary" onClick={async () => { try { await navigator.clipboard.writeText(code); setCopied(true); setCopyError(false); } catch { setCopyError(true); } }}><Icon name="copy" size={16} />{copied ? 'Copiado!' : 'Copiar código'}</button>{copyError && <small>Selecione o código acima e copie manualmente.</small>}<small>Válido até {expiresAt ? new Date(expiresAt).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'short', timeStyle: 'short' }) : 'o prazo informado'} (horário de Brasília). Uso único.</small><small>Envie o usuário e o código diretamente à pessoa. O código aparece somente nesta geração.</small></div>;
 }
 export function UserAccess({ people, labs, support }: { people: Person[]; labs: Lab[]; support: boolean }) {
   const [mode, setMode] = useState<'activate' | 'reset'>('activate');

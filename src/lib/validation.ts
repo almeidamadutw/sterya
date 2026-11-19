@@ -1,8 +1,9 @@
 export function normalizeUsername(value: string) {
-  const username = value.trim().toLowerCase().replace(/@ceoclubcpe$/, '');
+  const username = value.trim().toLowerCase().replace(/@(?:cpe\.ceoclub|ceoclubcpe)$/, '');
   return /^[a-z0-9][a-z0-9._-]{2,39}$/.test(username) ? username : null;
 }
 export function authEmail(username: string) { return `${username}@acesso.sterya.app`; }
+export function displayUsername(username: string) { return `${username}@cpe.ceoclub`; }
 export function passwordError(password: string) {
   return password.length < 10 || password.length > 128 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password)
     ? 'Use de 10 a 128 caracteres, com letras e números.' : null;

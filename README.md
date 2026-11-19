@@ -14,6 +14,9 @@ Sistema de controle de processos da esterilização da Casal Odonto. Acompanha a
 - Perfis suporte, gestor, equipe e laboratório; isolamento por clínica e por laboratório.
 - Painel com indicadores reais do banco, listas de peças/laboratórios e estados vazios.
 - Estrutura de dados para PPF/lente, PT, protocolo, PPR, onlay e PSI.
+- Beta aberta em `/beta`, com dados fictícios e simulação local de peças, histórico, filtros, perfis e pedidos de materiais.
+
+O acesso de suporte solicitado é `suporte@cpe.ceoclub`. A senha é definida com o código entregue ao responsável; nenhum código de ativação ou senha é versionado.
 
 **Próximas etapas:** cadastro e movimentação de peças, etiquetas, tabela de valores de laboratórios, agenda/importação Clinicorp e pedidos/aprovações de materiais. As telas indicam o que ainda está em preparação. Esta entrega não realiza sincronização com o Clinicorp.
 

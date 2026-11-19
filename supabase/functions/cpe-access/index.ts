@@ -5,7 +5,7 @@ const secret = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const admin = createClient(url, secret, { auth: { persistSession: false, autoRefreshToken: false } });
 const cors = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-client-info', 'Access-Control-Allow-Methods': 'POST, OPTIONS' };
 const response = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers: { ...cors, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
-const normalize = (v: unknown) => String(v ?? '').trim().toLowerCase().replace(/@ceoclubcpe$/, '');
+const normalize = (v: unknown) => String(v ?? '').trim().toLowerCase().replace(/@(?:cpe\.ceoclub|ceoclubcpe)$/, '');
 async function digest(value: string) {
   return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)))).map(b => b.toString(16).padStart(2, '0')).join('');
 }

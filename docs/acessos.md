@@ -30,7 +30,13 @@ O código de recuperação dura 15 minutos. Um código de ativação não serve 
 
 ## Primeira conta de suporte
 
-A primeira conta precisa de um código inicial emitido pelo responsável técnico, fora do fluxo público. No ambiente preparado nesta entrega, foi reservado o usuário **matteo**, perfil **suporte**, clínica **Casal Odonto**. A conta só é criada quando seu código inicial é resgatado. O código não é versionado; será entregue diretamente a Matteo. Se expirar, o responsável técnico emite um novo hash com a mesma finalidade no ambiente administrativo do banco.
+A primeira conta precisa de um código inicial emitido pelo responsável técnico, fora do fluxo público. A pedido de Matteo, o acesso inicial será **suporte@cpe.ceoclub**, perfil **suporte**, clínica **Casal Odonto**. O identificador interno é `suporte`. O código inicial anteriormente reservado para `matteo` foi revogado antes do uso. A conta Auth e o perfil são criados quando o novo código é resgatado. O código não é versionado; será entregue diretamente a Matteo. Se expirar, o responsável técnico emite um novo hash com a mesma finalidade no ambiente administrativo do banco.
+
+O login aceita o formato `usuario@cpe.ceoclub` e também o identificador simples. O sufixo anterior `@ceoclubcpe` continua aceito para compatibilidade. Este identificador não é uma caixa postal real.
+
+## Testar sem conta
+
+No login, **Explorar versão beta** abre `/beta`. Esse ambiente contém somente dados fictícios, mantidos em memória no navegador. Permite navegar, simular movimentações de peças, consultar o histórico e testar pedidos/aprovações de materiais. Os perfis simulados podem ser trocados na tela. Recarregar a página ou clicar em **Reiniciar teste** restaura o cenário inicial. Não há login, consultas ao Supabase ou importação de pacientes nesse ambiente. A beta não altera as permissões dos acessos reais.
 
 ## Dificuldades de acesso
 
