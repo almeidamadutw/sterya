@@ -62,5 +62,6 @@ A publicação automática desta entrega foi bloqueada pela conexão Vercel com 
 - [Arquitetura e segurança](docs/arquitetura.md)
 - [Como entrar e administrar usuários](docs/acessos.md)
 - [Requisitos e próximas etapas](docs/requisitos.md)
+- [Controle protético e laboratórios: fluxo, etiquetas e custos](docs/laboratorios-e-pecas.md)
 - [Identidade e nomes originais](docs/identidade.md)
 - [Validação da primeira entrega](docs/validacao.md)
