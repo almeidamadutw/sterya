@@ -1,0 +1,6 @@
+project_id = "sterya"
+
+[functions.cpe-access]
+# Public activation/reset use a high-entropy one-time code. Administrative
+# actions validate the caller's JWT and active database profile in the function.
+verify_jwt = false
