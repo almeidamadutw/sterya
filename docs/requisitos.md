@@ -33,3 +33,7 @@ A equipe prepara itens e quantidades; Ana aprova e deixa observações; o respon
 - Relação exata de cada peça com a consulta esperada na agenda.
 - Se o reenvio exige revisão/desmarcação da consulta; não automatizar cancelamentos sem regra validada.
 - Quais dados cada perfil operacional poderá cadastrar ou alterar.
+
+## Detalhamento do controle protético validado em 19/11/2026
+
+O mapeamento de laboratórios, etapas por peça, precificação, impressão de etiquetas/fichas, acesso externo, prioridade por agenda, tetos mensais e proposta de integração ao LYRVA estão descritos em [Laboratórios e peças](laboratorios-e-pecas.md). Trata-se de requisitos para implementação, não de funcionalidade já ativa.
