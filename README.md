@@ -50,7 +50,9 @@ As migrações ficam em `supabase/migrations/`. O código do backend de acessos 
 
 ## Publicação
 
-Importe este repositório na Vercel como Next.js, configure as duas variáveis acima para preview e produção e use Node.js 24. A primeira publicação é uma prévia para revisão. Mudanças posteriores no código devem manter o mesmo projeto e a conexão Git existente.
+Importe este repositório na Vercel como Next.js e use Node.js 24. A primeira prévia já inclui a URL e a chave publicável do Supabase STERYA em `next.config.ts`, então pode ser publicada diretamente pela importação Git. São configurações públicas; a proteção dos dados continua aplicada no banco. Para outro ambiente/projeto, configure as duas variáveis acima para substituir esses valores. Nunca utilize uma chave privilegiada nessa configuração.
+
+A publicação automática desta entrega foi bloqueada pela conexão Vercel com erro 403 (sem permissão para criar projeto). A CLI também não tem login válido e o navegador exibiu uma etapa de autenticação. A importação precisa ser concluída pelo titular da conta. A primeira publicação será uma prévia para revisão. Mudanças posteriores no código devem manter o mesmo projeto e a conexão Git existente.
 
 ## Documentação
 

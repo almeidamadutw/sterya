@@ -21,8 +21,12 @@ Dados sintéticos de duas clínicas, equipe e laboratório foram usados para tes
 - Rejeição de código expirado, reutilizado e de finalidade incorreta.
 - Recuperação de senha por código e bloqueio das sessões anteriores.
 
-## Navegador
+## Navegador — pendente após publicação
 
-Login, erro de credenciais, persistência após recarregar, sair, redirecionamento de páginas privadas, bloqueio direto da área de usuários para equipe, navegação de ativação/recuperação e ausência de transbordamento horizontal em celular.
+Ainda precisam ser executados na interface publicada: login, erro de credenciais, persistência após recarregar, sair, redirecionamento de páginas privadas, bloqueio direto da área de usuários para equipe, navegação de ativação/recuperação e ausência de transbordamento horizontal em celular. O navegador local não pôde iniciar por restrição de sockets do ambiente e a publicação Vercel foi bloqueada por permissão. Build e testes reais do backend passaram; esses resultados não substituem a inspeção da interface.
+
+## Configuração do Supabase
+
+Foram corrigidas as permissões de execução da função interna de ativação automática de RLS. Os avisos informativos de RLS sem políticas nas três tabelas privadas são intencionais: elas não têm acesso para os clientes. O painel ainda informa que a proteção contra senhas vazadas está desativada; habilitá-la em Auth é uma recomendação antes do uso operacional: https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection
 
 Os dados sintéticos e contas de teste são removidos antes da entrega. As telas operacionais ainda em preparação não são consideradas funcionalidades concluídas.
