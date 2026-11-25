@@ -18,7 +18,7 @@ Sistema de controle de processos da esterilização da Casal Odonto. Acompanha a
 
 O acesso de suporte solicitado é `suporte@cpe.ceoclub`. A senha é definida com o código entregue ao responsável; nenhum código de ativação ou senha é versionado.
 
-**Próximas etapas:** cadastro e movimentação de peças, etiquetas, tabela de valores de laboratórios, agenda/importação Clinicorp e pedidos/aprovações de materiais. As telas indicam o que ainda está em preparação. Esta entrega não realiza sincronização com o Clinicorp.
+**Próximas etapas:** cadastro e movimentação de peças, etiquetas, agenda/importação Clinicorp e pedidos/aprovações de materiais. **Precificação não será implementada por enquanto:** normalmente ocorre manualmente por etapa-peça, mas é necessário consultar a Ellis sobre uma possível planilha de preços fixos por etapa. As telas indicam o que ainda está em preparação. Esta entrega não realiza sincronização com o Clinicorp.
 
 ## Desenvolvimento
 
