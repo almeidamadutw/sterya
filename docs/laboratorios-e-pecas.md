@@ -136,4 +136,4 @@ Cada evento relevante deve registrar: ID da peça, evento/status anterior e novo
 
 ## 13. Não confundir protótipo com implementação
 
-A beta descrita em `docs/beta.md` usa dados fictícios e simulação no navegador. O cadastro/edição operacional real, as etiquetas imprimíveis, precificação, sincronização Clinicorp, acesso externo de laboratório, teto mensal e integração LYRVA permanecem como trabalho a implementar e validar.
+A beta descrita em `docs/beta.md` ainda usa dados fictícios e simulação no navegador. Já foram implantados em 25/11/2026 o **cadastro manual real de peças**, as **movimentações persistentes com auditoria e estorno**, a **visão de peças por laboratório com RLS** e a **etiqueta 60 × 40 mm imprimível via navegador** (três datas). O login operacional de cada laboratório ainda exige a emissão de seus códigos pela gestão, e a impressão física depende de teste com a Ablemark. **Ainda pendentes:** edição completa de peças, integração e criação automática via Clinicorp, precificação suspensa, tetos mensais, integração LYRVA, módulo de materiais/compras e validação da publicação web.
