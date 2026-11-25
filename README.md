@@ -18,7 +18,20 @@ Sistema de controle de processos da esterilização da Casal Odonto. Acompanha a
 
 O acesso de suporte solicitado é `suporte@cpe.ceoclub`. A senha é definida com o código entregue ao responsável; nenhum código de ativação ou senha é versionado.
 
-**Próximas etapas:** cadastro e movimentação de peças, etiquetas, agenda/importação Clinicorp e pedidos/aprovações de materiais. **Precificação não será implementada por enquanto:** normalmente ocorre manualmente por etapa-peça, mas é necessário consultar a Ellis sobre uma possível planilha de preços fixos por etapa. As telas indicam o que ainda está em preparação. Esta entrega não realiza sincronização com o Clinicorp.
+## Operação de peças adicionada em 25/11/2026
+
+- Banco com cinco laboratórios nomeados pela equipe e peças isoladas por clínica/laboratório.
+- Cadastro manual real de peças via painel `/painel/pecas`, com paciente, procedimento, dente/arcada, unidade, laboratório, prioridade e próxima consulta.
+- Movimentações persistentes: envio, confirmação no laboratório, início de produção, despacho, chegada física à clínica, entrega ao paciente, revisão, reenvio e cancelamento.
+- Estorno auditado de recebimento e entrega equivocados, com justificativa obrigatória. Histórico com usuário, perfil, status anterior e novo, horário e observação.
+- Página de detalhe de peça em `/painel/pecas/[id]` e etiqueta para impressão de 60 × 40 mm em `/etiquetas/[id]`, com três datas: envio, chegada à clínica e entrega ao paciente.
+- Controle de permissões no banco: funções privilegiadas em schema privado, RPCs invocadoras e políticas RLS para leitura por laboratório.
+- Migrações aplicadas ao Supabase STERYA e versionadas em `supabase/migrations/`.
+- Pipeline `Verificar STERYA` no GitHub Actions para typecheck, lint, testes e build. Validação de fluxo no Supabase realizada dentro de transação com rollback, sem registros sintéticos remanescentes.
+
+**Não concluído:** sincronização com Clinicorp, compra e controle de materiais real, geração automática de ficha/OS, testes físicos da impressora, testes de navegador publicados, cadastro de usuários individuais dos laboratórios e publicação Vercel confirmada. O painel de materiais ainda é uma tela em preparação, enquanto a beta segue fictícia.
+
+**Precificação permanece suspensa:** normalmente manual por etapa-peça, mas deve-se consultar a Ellis sobre a planilha de valores fixos antes de desenvolver qualquer cálculo ou campo financeiro.
 
 ## Desenvolvimento
 
