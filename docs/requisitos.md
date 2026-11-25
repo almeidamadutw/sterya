@@ -39,3 +39,13 @@ A equipe prepara itens e quantidades; Ana aprova e deixa observações; o respon
 ## Detalhamento do controle protético validado em 19/11/2026
 
 O mapeamento de laboratórios, etapas por peça, **decisão de adiar a precificação**, impressão de etiquetas/fichas, acesso externo, prioridade por agenda e propostas futuras de tetos mensais e integração ao LYRVA estão descritos em [Laboratórios e peças](laboratorios-e-pecas.md). Trata-se de requisitos para implementação, não de funcionalidade já ativa.
+
+## Entrega técnica implementada em 25/11/2026
+
+- Cadastro manual de peças ligado ao Supabase e sem precificação.
+- Envio, recebimento no laboratório, produção, despacho, recebimento físico na clínica, entrega e revisão com registros auditáveis.
+- Estornos de recebimento e entrega com motivo obrigatório.
+- Cinco laboratórios informados cadastrados no banco; visibilidade das peças dos laboratórios sujeita a perfil e RLS.
+- Etiqueta HTML 60 × 40 mm imprimível pelo navegador, com nome do paciente, tipo, dente/arcada, códigos e três datas.
+- Integração Clinicorp e LYRVA **não** implementadas; compra e materiais seguem protótipo.
+- A liberação operacional depende de testes de navegador publicado, impressora e usuários autorizados.
