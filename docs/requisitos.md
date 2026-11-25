@@ -16,7 +16,7 @@ PPF/lente, PT, protocolo, PPR, onlay e PSI. O controle deve funcionar de um úni
 4. Registrar entrega ao paciente sem concluir indevidamente as outras peças dele.
 5. Registrar revisão/reenvio, motivo e histórico.
 6. Filtrar por laboratório, com acesso externo limitado às próprias peças.
-7. Manter tabela editável de valores sugeridos por tipo de peça.
+7. **Precificação adiada:** normalmente manual por etapa-peça, mas não implementar ainda. A Ellis pode ter uma planilha com preços fixos por etapa; verificar antes de decidir a estrutura.
 
 ## Agenda e Clinicorp
 
@@ -33,7 +33,9 @@ A equipe prepara itens e quantidades; Ana aprova e deixa observações; o respon
 - Relação exata de cada peça com a consulta esperada na agenda.
 - Se o reenvio exige revisão/desmarcação da consulta; não automatizar cancelamentos sem regra validada.
 - Quais dados cada perfil operacional poderá cadastrar ou alterar.
+- **Precificação suspensa em 25/11/2026:** confirmar primeiro com a Ellis a possível planilha de preços por etapa; não criar funcionalidade de preços agora.
+- Laboratórios nomeados em 25/11/2026: Laboratório Alexandra - Carla; Laboratório Emerson; Laboratório Design - Renan; Laboratório Daiane Mota; Laboratório Eder.
 
 ## Detalhamento do controle protético validado em 19/11/2026
 
-O mapeamento de laboratórios, etapas por peça, precificação, impressão de etiquetas/fichas, acesso externo, prioridade por agenda, tetos mensais e proposta de integração ao LYRVA estão descritos em [Laboratórios e peças](laboratorios-e-pecas.md). Trata-se de requisitos para implementação, não de funcionalidade já ativa.
+O mapeamento de laboratórios, etapas por peça, **decisão de adiar a precificação**, impressão de etiquetas/fichas, acesso externo, prioridade por agenda e propostas futuras de tetos mensais e integração ao LYRVA estão descritos em [Laboratórios e peças](laboratorios-e-pecas.md). Trata-se de requisitos para implementação, não de funcionalidade já ativa.
