@@ -7,8 +7,8 @@ export const metadata = { title: 'Visão geral' };
 export default async function Dashboard() {
   const profile = await requireProfile();
   const supabase = await createClient();
-  const statuses = ['no_laboratorio', 'recebida', 'revisao', 'entregue'];
-  const counts = await Promise.all(statuses.map(status => supabase.from('pieces').select('id', { count: 'exact', head: true }).eq('status', status)));
+  const statuses = [['no_laboratorio','recebido_laboratorio','em_producao','despachada'], ['recebida'], ['revisao'], ['entregue']];
+  const counts = await Promise.all(statuses.map(status => supabase.from('pieces').select('id', { count: 'exact', head: true }).in('status', status)));
   const failed = counts.some(result => result.error);
   const today = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'long', timeZone: 'America/Sao_Paulo' }).format(new Date());
   const cards = [{ title: 'No laboratório', sub: 'Acompanhando a produção', icon: 'lab', color: 'blue' }, { title: 'Recebidas na clínica', sub: 'Prontas para a próxima etapa', icon: 'box', color: 'green' }, { title: 'Em revisão', sub: 'Atenção aos retornos', icon: 'clock', color: 'amber' }, { title: 'Entregues ao paciente', sub: 'Cuidado concluído', icon: 'check', color: 'purple' }];
