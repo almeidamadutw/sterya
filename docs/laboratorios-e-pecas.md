@@ -1,7 +1,7 @@
 # Controle Protético e Laboratórios — requisitos operacionais
 
 **Projeto:** STERYA / CEO Club CPE  
-**Origem:** validação operacional com a equipe da Casal Odonto em 19/11/2026.  
+**Origem:** validação operacional com a equipe da Casal Odonto em 19/11/2026; nomes e decisão sobre precificação atualizados em 25/11/2026.  
 **Estado deste documento:** requisitos coletados e propostas de implementação; não implica funcionalidades já publicadas.
 
 ## 1. Objetivo
@@ -10,15 +10,15 @@ Acompanhar cada peça odontológica desde a moldagem e a ordem de serviço até 
 
 ## 2. Encaminhamento dos laboratórios
 
-Mapeamento informado verbalmente; confirmar grafia dos nomes e cadastro formal antes de criar contas:
+Nomes operacionais fornecidos em 25/11/2026. As especialidades abaixo foram informadas na conversa anterior; conferir o enquadramento final durante o cadastro:
 
-| Nome operacional | Especialidade informada | Observações |
+| Nome cadastral informado | Especialidade informada | Observações |
 | --- | --- | --- |
-| Emerson | PPF posterior | Encaminhamento preferencial |
-| Designer | PSI e PPF anterior | Confirmar nome cadastral |
-| Carla / Alexandre | PT, PPR e demais peças não cobertas pelas especialidades | O laboratório é referido pelos dois nomes |
-| Daiane | Contenção | Apenas contenção |
-| Eder | Infraestrutura da PPR | Etapa específica, possivelmente vinculada a uma PPR que seguirá para outro laboratório |
+| Laboratório Alexandra - Carla | PT, PPR e demais peças não cobertas pelas especialidades | Manter a grafia fornecida, sem substituir por "Alexandre" |
+| Laboratório Emerson | PPF posterior | Encaminhamento preferencial |
+| Laboratório Design - Renan | PSI e PPF anterior | Usar "Design - Renan", não "Designer" |
+| Laboratório Daiane Mota | Contenção | Apenas contenção |
+| Laboratório Eder | Infraestrutura da PPR | Etapa específica, possivelmente vinculada a uma PPR que seguirá para outro laboratório |
 
 A sugestão de laboratório é automática segundo o procedimento **e a etapa**, mas permite substituição autorizada e registra a justificativa. Não presumir que toda peça tenha exatamente um laboratório: a infraestrutura da PPR pode exigir fluxo em mais de um responsável.
 
@@ -30,20 +30,20 @@ Campos propostos para o cadastro:
 - Identificador do paciente no Clinicorp, nome, unidade (Sorocaba / Salto) e agendamento vinculado.
 - Procedimento/tipo de peça, quantidade e descrição do trabalho.
 - Dente(s) ou região/arcada, quando aplicáveis. Não mesclar automaticamente peças diferentes de um mesmo paciente.
-- Laboratório e responsável atribuído; preço unitário negociado; quantidade; valor total calculado; moeda BRL.
+- Laboratório e responsável atribuído; quantidade da peça. **Não exigir preço nesta etapa** (precificação adiada).
 - Prioridade normal/urgente, justificativa e data/hora da próxima consulta do paciente.
 - Prazo prometido e datas de envio, recebimento pelo laboratório, retorno à clínica e entrega ao paciente.
 - Código próprio do laboratório (pode ficar vazio até o retorno); local físico/caixa na clínica.
 - Status operacional, observação, anexos autorizados e histórico de eventos.
 
-Valores são mantidos por laboratório + tipo/etapa de peça, editáveis por perfil autorizado, com valor aplicado à peça congelado no momento do registro para preservar histórico de custo. A exibição do preço na etiqueta **não foi confirmada** e deve ser configurável/omitida para documentos externos.
+**Decisão de 25/11/2026 sobre precificação:** normalmente o valor é **manual, por etapa-peça**. **Não implementar a precificação agora, nem mesmo o preenchimento manual**, porque a Ellis talvez possua uma planilha com preços fixos por etapa. Antes de modelar tabela, valores, campos ou cálculo financeiro, verificar essa planilha e definir as regras com a equipe. Não incluir valores na etiqueta nesta fase.
 
 ## 4. Ciclo de vida e permissões
 
 Estados previstos, com datas e autores individualizados:
 
 1. **Moldagem realizada / identificado:** registrar automaticamente a partir do Clinicorp se houver evento/dado adequado; senão, oferecer criação manual.
-2. **Aguardando envio:** confirmar tipo, dente/arcada, laboratório, valor e prazo; gerar ordem de serviço.
+2. **Aguardando envio:** confirmar tipo, dente/arcada, laboratório e prazo; gerar ordem de serviço. Valor fica fora desta etapa até definição da precificação.
 3. **Enviado ao laboratório:** registrar quem enviou, quando, referência da OS e imprimir etiqueta com código interno.
 4. **Recebido no laboratório:** o laboratório confirma chegada física e registra sua própria referência/código quando disponível.
 5. **Em produção:** laboratório acompanha execução e atualiza previsão; permitir ocorrências de atraso e observações.
@@ -75,7 +75,7 @@ Portal responsivo, com login próprio, mostrando **somente** peças daquele labo
 - Data/hora da próxima consulta, prazo de produção, status, prioridade e eventuais atrasos;
 - Ação para confirmar chegada, registrar código do laboratório, marcar produção, atualizar previsão e informar despacho;
 - Resposta para peças prioritárias: "consigo entregar" / "não consigo cumprir prazo", previsão e observação;
-- Seu próprio acumulado e limite mensal, se a gestão autorizar a exposição contratual dessa informação.
+- Visualização de valores/acumulado/teto mensal **não será implementada nesta etapa**; depende da decisão futura sobre precificação e acesso.
 
 Não mostrar outros laboratórios, dados financeiros da clínica ou dados clínicos desnecessários. Alterações e acessos administrativos exigem autenticação, controle por perfil e auditoria no banco.
 
@@ -85,19 +85,19 @@ Não mostrar outros laboratórios, dados financeiros da clínica ou dados clíni
 - Ordenar por consulta mais próxima e destacar vencidos ou em risco.
 - A equipe pode marcar prioridade/urgência e registrar motivo (ex.: semana com vários procedimentos).
 - O laboratório visualiza claramente a prioridade e informa capacidade de entrega e previsão, sem alterar unilateralmente o que foi solicitado.
-- Permitir negociação de quais peças prioritárias cabem dentro do teto mensal, deixando rastreabilidade da decisão da clínica.
+- Futuramente, quando houver regras de preço/teto validadas, permitir negociação de quais peças prioritárias cabem no orçamento, com rastreabilidade. **Não implementar cálculo de teto agora**.
 - Sempre que houver integração, atualizar próxima consulta a partir do Clinicorp sem duplicar a peça. Não cancelar ou reagendar consultas automaticamente sem regra validada.
 
-## 8. Preços, teto mensal e LYRVA
+## 8. Precificação suspensa; tetos e integração financeira condicionados
 
-- Cadastrar tabela de valores negociados por laboratório e tipo de trabalho, com histórico de alterações.
-- Registrar valor de cada peça e calcular total por paciente, laboratório, unidade e mês.
-- Registrar **limite de gasto mensal por laboratório**, configurável por gestão.
-- Painel mensal: valor já realizado/confirmado, valores previstos/solicitados, saldo estimado até o teto e peças pendentes; distinguir competência financeira de fluxo físico.
-- Alertas visuais de aproximação/ultrapassagem do teto, com parâmetros configuráveis (percentuais exatos ainda não definidos).
-- Fluxo de prioridade quando orçamento estiver apertado, permitindo que laboratório e equipe negociem a lista a produzir sem apagar solicitações.
-- Integração proposta com **LYRVA** para que o financeiro acompanhe custos e compromissos de laboratório. **Ainda depende de validação técnica e de regras de contabilização, pagamento e prevenção de duplicidade.**
-- O laboratório pode consultar seu próprio total e limite, se autorizado; não acessa dados de outros laboratórios.
+**Decisão em 25/11/2026: NÃO IMPLEMENTAR PRECIFICAÇÃO NESTE MOMENTO.**
+
+- A equipe informou que o preço normalmente é definido **manualmente por etapa-peça**, e não necessariamente por peça/procedimento completo.
+- Antes de desenvolver, confirmar com a **Ellis** se existe uma **planilha com preços fixos por etapa**.
+- Não criar ainda tabela de preços, campo de valor no formulário operacional, cálculo automático nem rotina de cobrança/custo em produção.
+- Só após essa validação definir se a fonte de valores será planilha fixa importável, tabela parametrizada, lançamento manual por etapa ou combinação dessas possibilidades.
+- Os tetos mensais por laboratório, alertas de orçamento e integração com **LYRVA** permanecem como **propostas futuras condicionadas** à regra de precificação validada. Não calcular gastos com valores presumidos.
+- O controle operacional de peças, prioridades por consulta e movimentações físicas segue independente dessa decisão.
 
 ## 9. Auditoria e rastreabilidade
 
@@ -114,20 +114,20 @@ Cada evento relevante deve registrar: ID da peça, evento/status anterior e novo
 ## 11. Critérios de aceite sugeridos
 
 - Um paciente com 3 peças mostra 3 estados/valores/históricos independentes.
-- PPF posterior sugere Emerson, PSI sugere Designer, contenção sugere Daiane, infraestrutura PPR sugere Eder, com possibilidade de intervenção autorizada.
-- Peça de PPF anterior seleciona Designer; campos de dentes/arcada preservam números informados.
+- PPF posterior sugere Laboratório Emerson, PSI sugere Laboratório Design - Renan, contenção sugere Laboratório Daiane Mota, infraestrutura PPR sugere Laboratório Eder, com possibilidade de intervenção autorizada.
+- Peça de PPF anterior sugere Laboratório Design - Renan; campos de dentes/arcada preservam números informados.
 - Envio imprime etiqueta sem exigir código de laboratório; código pode ser cadastrado ao receber.
 - Laboratório não consegue ver peças de outro laboratório nem dar baixa de entrega ao paciente.
 - Despacho não marca peça "recebida na clínica"; só uma pessoa autorizada da clínica confirma o recebimento físico.
 - Baixa e estorno guardam usuário e motivo; existe histórico acessível.
-- Teto mensal mostra valores confirmados e compromissos previstos separadamente e sinaliza risco de ultrapassagem.
+- A equipe consegue concluir as etapas físicas da peça sem informar preço; precificação, teto mensal e cálculos financeiros estão explicitamente adiados.
 - Agenda permite ordenar as entregas pela próxima consulta e acompanhar as prioridades.
 
 ## 12. Dados a validar com a equipe
 
-1. Nomes cadastrais e logins de cada laboratório; relação exata Carla/Alexandre.
-2. Tabela de preços por peça e eventuais valores diferentes por região/dente/laboratório.
-3. Tetos mensais dos laboratórios e regra de contabilização (pedido, produção, entrega, faturamento ou pagamento).
+1. Identificadores e logins dos cinco laboratórios nomeados acima; validar especialidades definitivas, se necessário.
+2. Consultar a Ellis sobre a possível planilha de preços fixos por etapa; só então definir precificação manual por etapa-peça ou outra estrutura.
+3. Definir futuramente os tetos mensais dos laboratórios e a regra de contabilização, depois da confirmação da precificação.
 4. Modelo/largura/compatibilidade da etiquetadora, tamanho da ficha, campos que devem ir na etiqueta.
 5. Quem pode editar preços, autorizar exceções e confirmar entrega final ao paciente.
 6. Campos e disponibilidade real da API Clinicorp para moldagem, agenda e peças.
