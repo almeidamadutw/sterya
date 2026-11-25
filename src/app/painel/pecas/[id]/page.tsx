@@ -18,14 +18,14 @@ const actionLabel: Record<string,string> = {
   receber_laboratorio: 'Confirmar recebimento no laboratório', iniciar_producao: 'Iniciar produção',
   despachar: 'Despachar para a clínica', receber_clinica: 'Confirmar chegada física à clínica',
   entregar_paciente: 'Registrar entrega ao paciente', solicitar_revisao: 'Solicitar revisão',
-  cancelar: 'Cancelar peça', marcar_prioridade: 'Prioridade adicionada',
+  cancelar: 'Cancelar peça', estornar_recebimento: 'Estornar recebimento na clínica', estornar_entrega: 'Estornar entrega ao paciente', marcar_prioridade: 'Prioridade adicionada',
   retirar_prioridade: 'Prioridade retirada'
 };
 const clinicSteps: Record<string,string[]> = {
   aguardando_envio: ['enviar','cancelar'], no_laboratorio: ['receber_clinica','cancelar'],
   recebido_laboratorio: ['receber_clinica','cancelar'], em_producao: ['receber_clinica','cancelar'],
-  despachada: ['receber_clinica','cancelar'], recebida: ['entregar_paciente','solicitar_revisao'],
-  entregue: ['solicitar_revisao'], revisao: ['reenviar','cancelar']
+  despachada: ['receber_clinica','cancelar'], recebida: ['entregar_paciente','solicitar_revisao','estornar_recebimento'],
+  entregue: ['solicitar_revisao','estornar_entrega'], revisao: ['reenviar','cancelar']
 };
 const labSteps: Record<string,string[]> = {
   no_laboratorio: ['receber_laboratorio'],
@@ -95,7 +95,7 @@ export default async function PieceDetail({
         <h3>{actionLabel[action]}</h3>
         {action==='receber_clinica' && <div className="field"><label htmlFor="location">Onde a peça está guardada? *</label><input id="location" name="location" maxLength={160} required placeholder="Caixa 2 / armário"/></div>}
         {isLab && ['receber_laboratorio','despachar'].includes(action) && <div className="field"><label htmlFor={`laboratory_reference_${action}`}>Código do laboratório (se disponível)</label><input id={`laboratory_reference_${action}`} name="laboratory_reference" maxLength={100} defaultValue={piece.laboratory_reference ?? ''}/></div>}
-        <div className="field"><label htmlFor={`note_${action}`}>Motivo / observação{['solicitar_revisao','cancelar'].includes(action) ? ' *' : ''}</label><input id={`note_${action}`} name="note" maxLength={1000} required={['solicitar_revisao','cancelar'].includes(action)} placeholder="Opcional, exceto revisão ou cancelamento"/></div>
+        <div className="field"><label htmlFor={`note_${action}`}>Motivo / observação{['solicitar_revisao','cancelar','estornar_recebimento','estornar_entrega'].includes(action) ? ' *' : ''}</label><input id={`note_${action}`} name="note" maxLength={1000} required={['solicitar_revisao','cancelar','estornar_recebimento','estornar_entrega'].includes(action)} placeholder="Opcional, exceto revisão ou cancelamento"/></div>
         <button className="button primary" type="submit">{actionLabel[action]}</button>
       </form>)}</div>
     </section>}
