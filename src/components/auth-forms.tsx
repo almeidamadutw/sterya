@@ -7,7 +7,7 @@ import type { ActionState } from '@/lib/validation';
 
 function Password({ name = 'password', label = 'Senha', newPassword = false }: { name?: string; label?: string; newPassword?: boolean }) {
   const [visible, setVisible] = useState(false);
-  return <div className="field"><label htmlFor={name}>{label}</label><div className="password-input"><input id={name} name={name} type={visible ? 'text' : 'password'} autoComplete={newPassword ? 'new-password' : 'current-password'} required minLength={newPassword ? 10 : undefined} maxLength={128} placeholder={newPassword ? 'Crie uma senha segura' : 'Sua senha'} /><button type="button" className="reveal-password" onClick={() => setVisible(!visible)} aria-label={visible ? `Ocultar ${label.toLowerCase()}` : `Mostrar ${label.toLowerCase()}`} aria-pressed={visible}><Icon name="eye" /></button></div></div>;
+  return <div className="field"><label htmlFor={name}>{label}</label><div className="password-input"><input id={name} name={name} type={visible ? 'text' : 'password'} autoComplete={newPassword ? 'new-password' : 'current-password'} required minLength={newPassword ? 8 : undefined} maxLength={128} placeholder={newPassword ? 'Crie uma senha segura' : 'Sua senha'} /><button type="button" className="reveal-password" onClick={() => setVisible(!visible)} aria-label={visible ? `Ocultar ${label.toLowerCase()}` : `Mostrar ${label.toLowerCase()}`} aria-pressed={visible}><Icon name="eye" /></button></div></div>;
 }
 function Feedback({ state }: { state: ActionState }) { return state.error ? <div className="notice error" role="alert">{state.error}</div> : null; }
 export function LoginForm({ success }: { success?: string }) {
@@ -30,7 +30,7 @@ export function CodeForm({ kind }: { kind: 'activate' | 'reset' }) {
     <form action={action} className="auth-form code-form" aria-busy={pending}>
       <div className="field"><label htmlFor="username">Usuário</label><input name="username" id="username" autoComplete="username" autoCapitalize="none" spellCheck={false} placeholder="Seu usuário" required maxLength={53} /></div>
       <div className="field"><label htmlFor="code">Código {isActivation ? 'de ativação' : 'de recuperação'}</label><input name="code" id="code" autoComplete="one-time-code" autoCapitalize="characters" spellCheck={false} placeholder="Cole aqui o código recebido" required maxLength={80} /><small>{isActivation ? 'Válido por 24 horas. Uso único.' : 'Válido por 15 minutos. Uso único.'}</small></div>
-      <Password label="Nova senha" newPassword /><small className="password-hint">Pelo menos 10 caracteres, com letras e números.</small><Password name="confirmation" label="Confirmar senha" newPassword />
+      <Password label="Nova senha" newPassword /><small className="password-hint">Pelo menos 8 caracteres, com letras e números.</small><Password name="confirmation" label="Confirmar senha" newPassword />
       <Feedback state={state} /><button className="button primary full" disabled={pending}><span>{pending ? 'Concluindo…' : isActivation ? 'Ativar minha conta' : 'Salvar nova senha'}</span><Icon name="arrow" /></button>
     </form>
   </>;

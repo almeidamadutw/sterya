@@ -5,8 +5,8 @@ export function normalizeUsername(value: string) {
 export function authEmail(username: string) { return `${username}@acesso.sterya.app`; }
 export function displayUsername(username: string) { return `${username}@cpe.ceoclub`; }
 export function passwordError(password: string) {
-  return password.length < 10 || password.length > 128 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password)
-    ? 'Use de 10 a 128 caracteres, com letras e números.' : null;
+  return password.length < 8 || password.length > 128 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password)
+    ? 'Use de 8 a 128 caracteres, com letras e números.' : null;
 }
 export function normalizeCode(value: string) {
   const code = value.replace(/[\s-]/g, '').toUpperCase();

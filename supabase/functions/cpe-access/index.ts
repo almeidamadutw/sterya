@@ -54,7 +54,7 @@ Deno.serve(async (req: Request) => {
     const code = String(body.code ?? '').replace(/[\s-]/g, '').toUpperCase();
     const password = String(body.password ?? '');
     if (!/^[a-z0-9][a-z0-9._-]{2,39}$/.test(username) || !/^[A-F0-9]{32}$/.test(code)) throw new AccessError('Usuário ou código inválido.');
-    if (password.length < 10 || password.length > 128 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) throw new AccessError('Use uma senha de 10 a 128 caracteres com letras e números.');
+    if (password.length < 8 || password.length > 128 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) throw new AccessError('Use uma senha de 8 a 128 caracteres com letras e números.');
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
     const { data: allowed, error: rateError } = await admin.rpc('take_access_attempt', { p_key: await digest(`access:${ip}`) });
     if (rateError) throw new AccessError('Serviço temporariamente indisponível.', 503);

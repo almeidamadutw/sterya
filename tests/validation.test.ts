@@ -11,6 +11,9 @@ test('paste-friendly codes keep full 128-bit entropy', () => {
   for (const code of ['', '123456', 'G'.repeat(32), 'A'.repeat(31), 'A'.repeat(33)]) assert.equal(normalizeCode(code), null);
 });
 test('password boundary prevents short and unbounded payloads', () => {
+  assert.ok(passwordError('Abc1234'));
+  assert.equal(passwordError('Abc12345'), null);
+  assert.equal(passwordError('Abc123456'), null);
   assert.ok(passwordError('abc123'));
   assert.ok(passwordError('a'.repeat(15)));
   assert.ok(passwordError('1'.repeat(15)));

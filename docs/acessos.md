@@ -4,7 +4,7 @@
 
 1. Abra a tela de login e selecione **Ativar com código**.
 2. Informe o usuário e o código recebidos do suporte.
-3. Escolha uma senha de 10 a 128 caracteres com letras e números e confirme a senha.
+3. Escolha uma senha de 8 a 128 caracteres com letras e números e confirme a senha.
 4. Depois de ativar, entre pelo login.
 
 O código é de uso único e expira em 24 horas. O código é vinculado ao usuário informado. A confirmação da ativação não entra automaticamente: o login valida a senha escolhida em uma nova sessão.
