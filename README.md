@@ -1,6 +1,6 @@
 # CEO Club CPE · STERYA
 
-Sistema de controle de processos da esterilização da Casal Odonto. Acompanha a organização de peças de laboratório e prepara o fluxo de pedidos de materiais.
+Sistema de controle de processos da esterilização da Casal Odonto. Acompanha peças de laboratório e reúne o catálogo de materiais por especialidade.
 
 **Nome original preservado:** STERYA. **Nome comercial:** CEO Club CPE.
 
@@ -29,9 +29,20 @@ O acesso de suporte solicitado é `suporte@cpe.ceoclub`. A senha é definida com
 - Migrações aplicadas ao Supabase STERYA e versionadas em `supabase/migrations/`.
 - Pipeline `Verificar STERYA` no GitHub Actions para typecheck, lint, testes e build. Validação de fluxo no Supabase realizada dentro de transação com rollback, sem registros sintéticos remanescentes.
 
-**Não concluído:** sincronização com Clinicorp, compra e controle de materiais real, geração automática de ficha/OS, testes físicos da impressora, testes de navegador publicados, cadastro de usuários individuais dos laboratórios e publicação Vercel confirmada. O painel de materiais ainda é uma tela em preparação, enquanto a beta segue fictícia.
+**Não concluído:** sincronização com Clinicorp, estoque e pedidos de compra, geração automática de ficha/OS, testes físicos da impressora, testes de navegador publicados e cadastro de usuários individuais dos laboratórios. A beta segue fictícia.
 
 **Precificação permanece suspensa:** normalmente manual por etapa-peça, mas deve-se consultar a Ellis sobre a planilha de valores fixos antes de desenvolver qualquer cálculo ou campo financeiro.
+
+## Catálogo de materiais adicionado em 25/11/2026
+
+- 139 materiais cadastrados na clínica, organizados em oito grupos a partir das 127 descrições do PDF fornecido pela equipe.
+- Tela real em `/painel/materiais`, com pesquisa por nome, tamanho, versão ou código, filtro por grupo e paginação.
+- Tamanhos e versões explícitos separados em cadastros próprios; descrição original preservada para conferência.
+- Importação rastreável, sem duplicações, com uma especificação de medida sinalizada para revisão.
+- Consulta restrita à equipe, gestão e suporte da própria clínica; catálogo indisponível aos laboratórios externos.
+- Quantidades, saldos, preços e unidades de compra permanecem sem preenchimento, pois não constam na lista. Compras e aprovações ainda serão implementadas.
+
+Os dados completos do PDF ficam no banco da clínica, fora do repositório público. Consulte [Catálogo de materiais](docs/materiais.md).
 
 ## Desenvolvimento
 
@@ -68,7 +79,7 @@ As migrações ficam em `supabase/migrations/`. O código do backend de acessos 
 
 Importe este repositório na Vercel como Next.js e use Node.js 24. A primeira prévia já inclui a URL e a chave publicável do Supabase STERYA em `next.config.ts`, então pode ser publicada diretamente pela importação Git. São configurações públicas; a proteção dos dados continua aplicada no banco. Para outro ambiente/projeto, configure as duas variáveis acima para substituir esses valores. Nunca utilize uma chave privilegiada nessa configuração.
 
-A publicação automática desta entrega foi bloqueada pela conexão Vercel com erro 403 (sem permissão para criar projeto). A CLI também não tem login válido e o navegador exibiu uma etapa de autenticação. A importação precisa ser concluída pelo titular da conta. A primeira publicação será uma prévia para revisão. Mudanças posteriores no código devem manter o mesmo projeto e a conexão Git existente.
+O projeto já está conectado à Vercel pela integração Git. Mudanças posteriores devem manter o mesmo projeto e a conexão existente. O status de cada commit no GitHub informa o resultado da publicação; os testes de interface e da impressora continuam separados da verificação de build.
 
 ## Documentação
 
@@ -76,5 +87,6 @@ A publicação automática desta entrega foi bloqueada pela conexão Vercel com 
 - [Como entrar e administrar usuários](docs/acessos.md)
 - [Requisitos e próximas etapas](docs/requisitos.md)
 - [Controle protético e laboratórios: fluxo, etiquetas e custos](docs/laboratorios-e-pecas.md)
+- [Catálogo de materiais por especialidade](docs/materiais.md)
 - [Identidade e nomes originais](docs/identidade.md)
 - [Validação da primeira entrega](docs/validacao.md)

@@ -24,7 +24,9 @@ A primeira tela operacional deverá responder: quem vem hoje, qual peça precisa
 
 ## Pedidos de materiais
 
-A equipe prepara itens e quantidades; Ana aprova e deixa observações; o responsável compra, registra número/protocolo e autoria. A referência funcional é o fluxo de aprovações do LYRVA. Esta etapa ainda está em preparação.
+O catálogo real já reúne os materiais do PDF da equipe, com busca e filtro em `/painel/materiais`. São 139 cadastros em oito grupos, sem quantidades, preços ou unidades de compra presumidos. Consulte [Catálogo de materiais](materiais.md).
+
+O fluxo de compras permanece em preparação: a equipe prepara itens e quantidades; Ana aprova e deixa observações; o responsável compra, registra número/protocolo e autoria. A referência funcional é o fluxo de aprovações do LYRVA.
 
 ## Decisões pendentes
 
@@ -47,5 +49,6 @@ O mapeamento de laboratórios, etapas por peça, **decisão de adiar a precifica
 - Estornos de recebimento e entrega com motivo obrigatório.
 - Cinco laboratórios informados cadastrados no banco; visibilidade das peças dos laboratórios sujeita a perfil e RLS.
 - Etiqueta HTML 60 × 40 mm imprimível pelo navegador, com nome do paciente, tipo, dente/arcada, códigos e três datas.
-- Integração Clinicorp e LYRVA **não** implementadas; compra e materiais seguem protótipo.
+- Catálogo real de materiais importado do PDF, com pesquisa, versões, filtro por grupo e rastreabilidade da origem. Sem acesso por laboratório externo.
+- Integração Clinicorp e LYRVA **não** implementadas; estoque, compras e aprovações permanecem pendentes.
 - A liberação operacional depende de testes de navegador publicado, impressora e usuários autorizados.

@@ -33,3 +33,11 @@ Ainda precisam ser executados na interface publicada: login, erro de credenciais
 Foram corrigidas as permissões de execução da função interna de ativação automática de RLS. Os avisos informativos de RLS sem políticas nas três tabelas privadas são intencionais: elas não têm acesso para os clientes. O painel ainda informa que a proteção contra senhas vazadas está desativada; habilitá-la em Auth é uma recomendação antes do uso operacional: https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection
 
 Os dados sintéticos e contas de teste são removidos antes da entrega. As telas operacionais ainda em preparação não são consideradas funcionalidades concluídas.
+
+## Catálogo de materiais — 25/11/2026
+
+- Importação conferida com o PDF: 127 descrições de origem, 139 materiais e oito grupos, com uma medida sinalizada para revisão.
+- Reexecução da mesma carga manteve os mesmos IDs e uma única importação, sem duplicações. Nenhuma unidade de compra, quantidade ou preço foi presumido.
+- RLS ativa nas três tabelas; leitura anônima e inserção direta pelo perfil autenticado bloqueadas nas permissões. Leitura limitada a suporte, gestor e equipe da mesma clínica pelas políticas.
+- Typecheck, lint, nove testes e build de produção concluídos. Os novos testes cobrem normalização de busca, zeros à esquerda em versões, caracteres literais de pesquisa e paginação inválida.
+- O catálogo usa dados reais em `/painel/materiais`; a beta permanece uma simulação. Esta validação não inclui inspeção visual autenticada no navegador publicado.
