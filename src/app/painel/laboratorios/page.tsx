@@ -19,5 +19,5 @@ export default async function Laboratories() {
     {error ? <p role="alert" className="notice error">Não foi possível carregar os laboratórios.</p>
       : data?.length ? <div className="table-scroll"><table><thead><tr><th>Laboratório</th><th>Especialidade</th><th>Situação</th></tr></thead><tbody>
         {data.map(lab => <tr key={lab.id}><td><b>{lab.name}</b></td><td>{specialty[lab.name] ?? 'Conforme cadastro'}</td><td><span className="badge">{lab.active ? 'Ativo' : 'Inativo'}</span></td></tr>)}
-      </tbody></table></div> : <EmptyState icon="lab" title="Nenhum laboratório cadastrado." text="Os laboratórios parceiros aparecerão aqui."/ >}</section></>;
+      </tbody></table></div> : <EmptyState icon="lab" title="Nenhum laboratório cadastrado." text="Os laboratórios parceiros aparecerão aqui."/>}</section></>;
 }
