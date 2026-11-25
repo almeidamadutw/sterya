@@ -15,4 +15,4 @@ export function normalizeCode(value: string) {
 export type ActionState = { error?: string; success?: string; code?: string; username?: string; expires_at?: string; kind?: string };
 export const roleNames: Record<string, string> = { suporte: 'Suporte', gestor: 'Gestão', equipe: 'Equipe', laboratorio: 'Laboratório' };
 export const procedureNames: Record<string, string> = { ppf_lente: 'PPF / lente', pt: 'PT', protocolo: 'Protocolo', ppr: 'PPR', onlay: 'Onlay', psi: 'PSI' };
-export const statusNames: Record<string, string> = { aguardando_envio: 'Aguardando envio', no_laboratorio: 'No laboratório', recebida: 'Recebida na clínica', entregue: 'Entregue ao paciente', revisao: 'Em revisão', cancelada: 'Cancelada' };
+export const statusNames: Record<string, string> = { aguardando_envio: 'Aguardando envio', no_laboratorio: 'Enviada ao laboratório', recebido_laboratorio: 'Recebida no laboratório', em_producao: 'Em produção', despachada: 'Despachada para a clínica', recebida: 'Recebida na clínica', entregue: 'Entregue ao paciente', revisao: 'Em revisão', cancelada: 'Cancelada' };
