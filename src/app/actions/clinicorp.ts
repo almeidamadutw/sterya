@@ -1,5 +1,6 @@
 'use server';
 
+import { FunctionsHttpError } from '@supabase/supabase-js';
 import { getProfile } from '@/lib/auth';
 import { clinicorpCredentialsForUnit, lookupClinicorpPatients, parseClinicorpLookup, type ClinicorpLookupResult } from '@/lib/clinicorp-lookup';
 import { createClient } from '@/lib/supabase/server';
@@ -19,7 +20,16 @@ export async function searchClinicorpPatient(unitId: string, term: string): Prom
   if (error) return { error: 'unavailable' };
   if (!data) return { error: 'denied' };
 
-  const credentials = clinicorpCredentialsForUnit(process.env.CLINICORP_UNIT_CONFIG, data.id);
-  if (!credentials) return { error: 'not_configured' };
-  return lookupClinicorpPatients(lookup, credentials);
+  const { data: result, error: edgeError } = await supabase.functions.invoke<ClinicorpLookupResult>('cpe-clinicorp-lookup', {
+    body: { unitId: data.id, term },
+  });
+  if (edgeError instanceof FunctionsHttpError) {
+    if ([401, 403].includes(edgeError.context.status)) return { error: 'denied' };
+    if (edgeError.context.status === 400) return { error: 'invalid' };
+  }
+  if (result && 'error' in result && result.error === 'not_configured') {
+    const fallback = clinicorpCredentialsForUnit(process.env.CLINICORP_UNIT_CONFIG, data.id);
+    if (fallback) return lookupClinicorpPatients(lookup, fallback);
+  }
+  return result ?? { error: 'unavailable' };
 }

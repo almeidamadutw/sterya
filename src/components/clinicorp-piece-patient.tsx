@@ -7,7 +7,8 @@ import type { ClinicorpLookupResult, ClinicorpPatient } from '@/lib/clinicorp-lo
 const errors: Record<Extract<ClinicorpLookupResult, { error: string }>['error'], string> = {
   invalid: 'Selecione a unidade e informe o nome completo ou o código numérico do paciente.',
   denied: 'Sua sessão ou seu acesso à unidade precisa ser conferido.',
-  not_configured: 'O Clinicorp ainda precisa ser conectado para esta unidade no CPE.',
+  not_configured: 'A unidade está sem uma configuração completa do Clinicorp nos Secrets do Supabase.',
+  credentials_rejected: 'O Clinicorp recusou as credenciais desta unidade. Confira o usuário, token e assinante.',
   busy: 'O Clinicorp recebeu muitas consultas. Tente novamente em instantes.',
   unavailable: 'O Clinicorp não respondeu à busca. Tente novamente ou preencha os campos manualmente.',
 };

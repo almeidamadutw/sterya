@@ -4,3 +4,7 @@ project_id = "sterya"
 # Public activation/reset use a high-entropy one-time code. Administrative
 # actions validate the caller's JWT and active database profile in the function.
 verify_jwt = false
+
+[functions.cpe-clinicorp-lookup]
+# The handler validates the token with Auth and verifies the active profile and unit via RLS.
+verify_jwt = false

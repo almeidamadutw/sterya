@@ -59,4 +59,6 @@ Em **Peças → Cadastrar nova peça**, escolha a unidade e busque pelo nome com
 
 ### Configurar a conexão
 
-No projeto Vercel do CPE, configure `CLINICORP_UNIT_CONFIG` como variável sensível de servidor no ambiente de produção, com o UUID de cada unidade do CPE e as credenciais de leitura do assinante correspondente. O formato está em `.env.example`. A configuração é por UUID porque a API busca pacientes no assinante, sem filtro de unidade no endpoint. Quando duas unidades usam o mesmo assinante, o Clinicorp pode retornar o mesmo cadastro para ambas. Escolha a unidade da peça conforme o atendimento. Depois de configurar a variável, publique uma nova versão para ativá-la.
+Cadastre as credenciais no Supabase do CPE, em **Edge Functions → Secrets**. Para Salto, use `CLINICORP_SALTO_API_USERNAME`, `CLINICORP_SALTO_API_TOKEN` e `CLINICORP_SALTO_SUBSCRIBER_ID`. Para Sorocaba, substitua `SALTO` por `SOROCABA`. A configuração global legada (`CLINICORP_API_USERNAME`, `CLINICORP_API_TOKEN` e `CLINICORP_SUBSCRIBER_ID`) é aceita para Salto no CPE e não ativa Sorocaba.
+
+Também é possível usar `CLINICORP_UNIT_CONFIG` com o UUID de cada unidade do CPE, no formato de `.env.example`. A mesma variável, se já configurada no servidor da Vercel, continua funcionando. A API busca pacientes no assinante, sem filtro de unidade nesse endpoint. Quando duas unidades usam o mesmo assinante, o Clinicorp pode retornar o mesmo cadastro para ambas.

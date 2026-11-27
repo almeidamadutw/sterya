@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { clinicorpCredentialsForUnit, lookupClinicorpPatients, parseClinicorpLookup } from '../src/lib/clinicorp-lookup.ts';
+import { clinicorpEdgeCredentials } from '../supabase/functions/cpe-clinicorp-lookup/config.ts';
 
 const credentials = { username: 'reader-fixture', token: 'dummy-token', subscriberId: 'casal-fixture' };
 
@@ -49,9 +50,33 @@ test('distinguishes missing records from connection failures and honors exact ID
     return Response.json({ data: { PatientId: 7701, Name: 'Paciente Fictício' } });
   });
   assert.deepEqual(result, { patients: [{ id: '7701', name: 'Paciente Fictício' }] });
-  for (const [status, expected] of [[404, { patients: [] }], [429, { error: 'busy' }], [401, { error: 'unavailable' }]] as const) {
+  for (const [status, expected] of [[404, { patients: [] }], [429, { error: 'busy' }], [401, { error: 'credentials_rejected' }]] as const) {
     assert.deepEqual(await lookupClinicorpPatients(lookup, credentials, async () => new Response(null, { status })), expected);
   }
   assert.deepEqual(await lookupClinicorpPatients(lookup, credentials,
     async () => Response.json({ PatientId: 7702, Name: 'Outro Paciente Fictício' })), { patients: [] });
+});
+
+test('reads existing Supabase secrets for Salto without enabling another clinic or unit', () => {
+  const secrets: Record<string, string> = {
+    CLINICORP_SALTO_API_USERNAME: 'salto-reader',
+    CLINICORP_SALTO_API_TOKEN: 'salto-fixture',
+    CLINICORP_SALTO_SUBSCRIBER_ID: 'salto-account',
+    CLINICORP_API_USERNAME: 'legacy-reader',
+    CLINICORP_API_TOKEN: 'legacy-fixture',
+    CLINICORP_SUBSCRIBER_ID: 'legacy-account',
+  };
+  const env = (key: string) => secrets[key];
+  const salto = { id: 'unit-a', name: 'Salto', tenantSlug: 'casal-odonto' };
+  const sorocaba = { ...salto, id: 'unit-b', name: 'Sorocaba' };
+  assert.equal(clinicorpEdgeCredentials(salto, env)?.subscriberId, 'salto-account');
+  assert.equal(clinicorpEdgeCredentials(sorocaba, env), null);
+  assert.equal(clinicorpEdgeCredentials({ ...salto, tenantSlug: 'other-tenant' }, env), null);
+  delete secrets.CLINICORP_SALTO_API_TOKEN;
+  assert.equal(clinicorpEdgeCredentials(salto, env), null);
+  delete secrets.CLINICORP_SALTO_API_USERNAME;
+  delete secrets.CLINICORP_SALTO_SUBSCRIBER_ID;
+  assert.equal(clinicorpEdgeCredentials(salto, env)?.subscriberId, 'legacy-account');
+  secrets.CLINICORP_UNIT = 'Sorocaba';
+  assert.equal(clinicorpEdgeCredentials(salto, env), null);
 });
