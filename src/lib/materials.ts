@@ -37,3 +37,21 @@ export const orderActions: Record<string, string> = {
   receber: 'Recebimento registrado',
   cancelar: 'Pedido cancelado',
 };
+
+export const orderPriorities = [
+  { value: 1, label: 'Normal' },
+  { value: 2, label: 'Alta' },
+  { value: 3, label: 'Urgente' },
+] as const;
+
+export type PurchaseItem = {
+  id: string;
+  name: string;
+  variant: string;
+  code: string;
+  purchase_unit: string;
+};
+
+export function orderPriorityLabel(priority: number) {
+  return orderPriorities.find(option => option.value === priority)?.label ?? 'Normal';
+}

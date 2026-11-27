@@ -35,3 +35,12 @@
 .material-checkbox input { width: 16px; height: 16px; flex: 0 0 auto; }
 .material-fieldset textarea { font: inherit; color: var(--navy); border: 1px solid #cbd2e0; border-radius: 9px; padding: 12px 16px; resize: vertical; }
 .material-fieldset textarea:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+.purchase-lines-heading { margin-bottom: 0; flex-wrap: wrap; }
+.purchase-lines-heading h2 { margin: 0; }
+.purchase-item-dialog { width: min(680px, calc(100% - 32px)); max-height: calc(100% - 32px); padding: 24px; color: var(--navy); border: 1px solid #dce4f0; border-radius: 14px; overflow: auto; }
+.purchase-item-dialog::backdrop { background: #08163f80; }
+.purchase-item-dialog > p { color: #536788; line-height: 1.5; font-size: 14px; }
+.badge.purchase-priority-2 { color: #80521b; background: #fff5df; border-color: #f1dab1; }
+.badge.purchase-priority-3 { color: #982f43; background: #fdf0f1; border-color: #efd3da; }
+.purchase-order-note { white-space: pre-wrap; overflow-wrap: anywhere; }

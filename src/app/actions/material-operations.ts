@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { requireProfile } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
-import { materialBase, orderBase, validMaterialId } from '@/lib/materials';
+import { materialBase, orderBase, orderPriorities, validMaterialId, type PurchaseItem } from '@/lib/materials';
 
 const field = (form: FormData, key: string) => String(form.get(key) ?? '').trim();
 
@@ -42,10 +42,12 @@ async function internalClient() {
 
 const denied = { error: 'Acesso restrito à equipe da clínica.' };
 
-export async function saveMaterial(form: FormData) {
+async function persistMaterial(form: FormData, fromPurchase = false) {
   const supabase = await internalClient();
   if (!supabase) return denied;
-  const id = field(form, 'id');
+  const id = fromPurchase ? '' : field(form, 'id');
+  const measure = field(form, 'measure');
+  if (fromPurchase && !measure) return { error: 'Informe a unidade de medida, como pacote, rolo ou caixa.' };
   const category = field(form, 'category');
   if ((id && !validMaterialId(id)) || !validMaterialId(category)) return { error: 'Selecione um grupo válido.' };
   const { data, error } = await supabase.rpc('save_material', {
@@ -53,12 +55,26 @@ export async function saveMaterial(form: FormData) {
     p_category: category,
     p_name: field(form, 'name'),
     p_variant: field(form, 'variant'),
-    p_measure: field(form, 'measure'),
+    p_measure: measure,
     p_clear_review: form.get('clear_review') === 'on',
   });
   if (error || !data) return { error: feedback(error) ?? 'Material não salvo.' };
-  revalidatePath(materialBase, 'layout');
-  return id ? { message: 'Material atualizado.' } : { href: materialBase + '/' + data + '?novo=1' };
+  if (!fromPurchase) {
+    revalidatePath(materialBase, 'layout');
+    return id ? { message: 'Material atualizado.' } : { href: materialBase + '/' + data + '?novo=1' };
+  }
+  const item = await supabase.from('materials').select('id,name,variant,code,purchase_unit').eq('id', data)
+    .single().overrideTypes<PurchaseItem, { merge: false }>();
+  if (item.error || !item.data) return { error: 'O cadastro foi salvo. Reabra o pedido para selecionar o material.' };
+  return { message: 'Item cadastrado.', item: item.data, reset: true };
+}
+
+export async function saveMaterial(form: FormData) {
+  return persistMaterial(form);
+}
+
+export async function registerPurchaseItem(form: FormData) {
+  return persistMaterial(form, true);
 }
 
 export async function moveStock(form: FormData) {
@@ -90,6 +106,8 @@ export async function requestOrder(form: FormData) {
   const unit = field(form, 'unit_id');
   const operation = field(form, 'operation');
   const items = parseItems(form);
+  const priority = Number(field(form, 'priority') || '1');
+  if (!orderPriorities.some(option => option.value === priority)) return { error: 'Selecione uma prioridade válida.' };
   if (!validMaterialId(unit) || !validMaterialId(operation) || !items) {
     return { error: 'Selecione uma unidade e informe os materiais e quantidades, sem repetir itens.' };
   }
@@ -98,6 +116,7 @@ export async function requestOrder(form: FormData) {
     p_unit: unit,
     p_note: field(form, 'note'),
     p_items: items,
+    p_priority: priority,
   });
   if (error || !data) return { error: feedback(error) ?? 'Pedido não salvo.' };
   revalidatePath(orderBase);

@@ -9,10 +9,12 @@ export type EditableMaterial = {
   review_note: string | null;
 };
 
-export function MaterialFields({ groups, material, measureInUse }: {
+export function MaterialFields({ groups, material, measureInUse, measureRequired, defaultGroup }: {
   groups: MaterialGroup[];
   material?: EditableMaterial;
   measureInUse?: boolean;
+  measureRequired?: boolean;
+  defaultGroup?: string;
 }) {
   return <>
     {material && <input type="hidden" name="id" value={material.id} />}
@@ -21,7 +23,7 @@ export function MaterialFields({ groups, material, measureInUse }: {
         <input name="name" defaultValue={material?.name} minLength={2} maxLength={160} required />
       </label>
       <label className="field">Especialidade / grupo
-        <select name="category" defaultValue={material?.category_id ?? ''} required>
+        <select name="category" defaultValue={material?.category_id ?? defaultGroup ?? ''} required>
           <option value="" disabled>Selecione</option>
           {groups.map(group => <option value={group.id} key={group.id}>{group.name}</option>)}
         </select>
@@ -31,7 +33,7 @@ export function MaterialFields({ groups, material, measureInUse }: {
       </label>
       <label className="field">Unidade de medida
         <input name="measure" defaultValue={material?.purchase_unit ?? ''} maxLength={80}
-          placeholder="Ex.: unidade, caixa, pacote" readOnly={measureInUse} />
+          placeholder="Ex.: unidade, caixa, pacote" readOnly={measureInUse} required={measureRequired} />
         {measureInUse && <small>Unidade em uso no estoque ou em pedidos.</small>}
       </label>
     </div>

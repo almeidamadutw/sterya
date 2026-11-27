@@ -42,7 +42,9 @@ O PDF e sua carga completa não são versionados no repositório público. O ban
 
 1. Em Materiais, cadastre a unidade de medida de cada item (por exemplo, caixa). A unidade de medida é fixa após o uso em estoque ou em um pedido.
 2. Em Estoque e edição, selecione a unidade da clínica e lance o saldo inicial, entrada avulsa ou baixa. Cada lançamento guarda motivo, responsável, horário e saldo. O estoque não aceita baixa acima do saldo.
-3. Em Pedidos de compra, selecione uma unidade e inclua um ou mais materiais com quantidade. O perfil Gestão aprova ou recusa o pedido. A equipe registra o código da compra e confirma as quantidades entregues.
+3. Em Pedidos de compra, selecione uma unidade, inclua os itens com quantidade e escolha a prioridade (Normal, Alta ou Urgente). Os pedidos pendentes aparecem primeiro, com os urgentes acima dos demais. O perfil Gestão aprova ou recusa o pedido. A equipe registra o código da compra e confirma as quantidades entregues.
 4. Cada recebimento soma ao estoque da unidade indicada no pedido. Entregas parciais deixam o pedido aberto até completar todos os itens. O histórico registra os responsáveis e as observações por etapa.
 
 O catálogo importado não tinha saldos ou unidades de medida. Eles são informados pela equipe a partir da contagem real. Para a Ana aprovar, o acesso dela deve estar ativo com perfil Gestão.
+
+O botão **Cadastrar item** na aba de compras abre o mesmo cadastro disponível durante a montagem de um pedido. Use os grupos **Essenciais** e **Outras compras** para itens como papel higiênico. O item salvo fica no catálogo e pode ser usado na lista atual sem perder as informações já preenchidas.

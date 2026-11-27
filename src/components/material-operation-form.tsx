@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation';
 
 type Result = { error?: string; message?: string; href?: string; reset?: boolean };
 
-export function MaterialOperationForm({ action, children, label }: {
-  action: (form: FormData) => Promise<Result>;
+export function MaterialOperationForm<T extends Result>({ action, children, label, onSaved }: {
+  action: (form: FormData) => Promise<T>;
   children: ReactNode;
   label: string;
+  onSaved?: (response: T) => void;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -38,7 +39,8 @@ export function MaterialOperationForm({ action, children, label }: {
           router.push(response.href);
         } else {
           if (response.reset) form.reset();
-          router.refresh();
+          if (onSaved) onSaved(response);
+          else router.refresh();
         }
       } catch {
         setResult({ error: 'A conexão falhou. Tente salvar novamente.' });

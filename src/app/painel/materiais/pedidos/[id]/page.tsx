@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { advanceOrder } from '@/app/actions/material-operations';
 import { MaterialOperationForm } from '@/components/material-operation-form';
 import { requireProfile } from '@/lib/auth';
-import { materialBase, materialDate, materialQuantity, orderActions, orderBase, orderStates, validMaterialId } from '@/lib/materials';
+import { materialBase, materialDate, materialQuantity, orderActions, orderBase, orderPriorityLabel, orderStates, validMaterialId } from '@/lib/materials';
 import { createClient } from '@/lib/supabase/server';
 
 export default async function OrderDetailPage({ params, searchParams }: {
@@ -16,7 +16,7 @@ export default async function OrderDetailPage({ params, searchParams }: {
   const profile = await requireProfile();
   const supabase = await createClient();
   const [order, items, events, units] = await Promise.all([
-    supabase.from('material_orders').select('code,unit_id,state,requested_by,requested_by_name,created_at,purchase_code').eq('id', id).maybeSingle(),
+    supabase.from('material_orders').select('code,unit_id,state,priority,note,requested_by,requested_by_name,created_at,purchase_code').eq('id', id).maybeSingle(),
     supabase.from('material_order_items').select('material_id,material_name,material_variant,measure,quantity,received').eq('order_id', id).order('material_name').order('material_variant'),
     supabase.from('material_order_events').select('id,action,note,actor_name,created_at').eq('order_id', id).order('created_at', { ascending: false }).order('id'),
     supabase.from('units').select('id,name'),
@@ -44,7 +44,10 @@ export default async function OrderDetailPage({ params, searchParams }: {
     </div>
     {novo === '1' && <p className="notice" role="status">Pedido enviado para aprovação.</p>}
     <section className="panel">
-      <div className="section-title"><h2>Materiais do pedido</h2></div>
+      <div className="section-title"><h2>Itens do pedido</h2>
+        <span className={'badge purchase-priority-' + request.priority}>Prioridade {orderPriorityLabel(request.priority).toLowerCase()}</span>
+      </div>
+      {request.note && <p className="purchase-order-note">{request.note}</p>}
       {request.purchase_code && <p><strong>Código da compra:</strong> {request.purchase_code}</p>}
       <div className="table-scroll"><table>
         <thead><tr><th>Material</th><th>Pedido</th><th>Recebido</th><th>Pendente</th></tr></thead>
