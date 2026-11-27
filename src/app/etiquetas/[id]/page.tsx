@@ -3,6 +3,7 @@ import { requireProfile } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 import { procedureNames } from '@/lib/validation';
 import { PrintLabelButton } from '@/components/print-label-button';
+import { cabinetBoxLabel } from '@/lib/piece-cabinet';
 
 export const dynamic = 'force-dynamic';
 export const metadata = { title: 'Etiqueta 50 × 30 mm | STERYA' };
@@ -16,10 +17,11 @@ export default async function LabelPage({ params }: { params: Promise<{id:string
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const supabase = await createClient();
   const { data: piece } = await supabase.from('pieces')
-    .select('id,patient_name,procedure_type,teeth,arch,reference,laboratory_reference,laboratory_id,sent_at,received_at,delivered_at')
+    .select('id,patient_name,procedure_type,teeth,arch,reference,cabinet_box,laboratory_reference,laboratory_id,sent_at,received_at,delivered_at')
     .eq('id',id).maybeSingle();
   if (!piece) notFound();
   const {data:lab} = await supabase.from('laboratories').select('name').eq('id',piece.laboratory_id).maybeSingle();
+  const box = cabinetBoxLabel(piece.cabinet_box);
   return <>
     <style>{`
       body {background:#f1f3f8}
@@ -47,7 +49,7 @@ export default async function LabelPage({ params }: { params: Promise<{id:string
       <div className="label-patient">{piece.patient_name}</div>
       <div className="label-line"><span><strong>PEÇA:</strong> {procedureNames[piece.procedure_type] ?? piece.procedure_type}</span><span><strong>DENTE:</strong> {piece.teeth?.join(',') || piece.arch || '—'}</span></div>
       <div className="label-line"><span><strong>LAB:</strong> {lab?.name ?? '—'}</span></div>
-      <div className="label-line label-code"><span><strong>CO:</strong> {piece.reference}</span></div>
+      <div className="label-line label-code">{box != null && <span><strong>CAIXA:</strong> {box}</span>}<span><strong>CO:</strong> {piece.reference}</span></div>
       <div className="label-line"><span><strong>CÓD. LAB:</strong> {piece.laboratory_reference || '__________________'}</span></div>
       <div className="label-dates">
         <div className="label-line"><span><strong>ENVIO:</strong> {date(piece.sent_at)}</span></div>

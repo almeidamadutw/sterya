@@ -35,8 +35,14 @@ Campos propostos para o cadastro:
 - Laboratório e responsável atribuído, com quantidade da peça. Os valores de referência ficam no catálogo de serviços do laboratório.
 - Prioridade normal/urgente, justificativa e data/hora da próxima consulta do paciente.
 - Prazo prometido e datas de envio, recebimento pelo laboratório, retorno à clínica e entrega ao paciente.
-- Código próprio do laboratório (pode ficar vazio até o retorno); local físico/caixa na clínica.
+- Código próprio do laboratório (pode ficar vazio até o retorno) e caixa do armário gerada no cadastro.
 - Status operacional, observação, anexos autorizados e histórico de eventos.
+
+### Numeração das caixas do armário
+
+Cada unidade tem uma sequência própria. As 100 caixas vão de **00 a 99**. A 101ª peça da mesma unidade recebe a caixa **00** e a sequência interna segue em 101. O número aparece na lista, na ficha e na etiqueta. A referência da peça continua identificando o registro mesmo quando o número da caixa se repete. O ID do Clinicorp vincula o paciente.
+
+A Visão geral conta as peças cadastradas no ano civil no horário de Brasília e mostra o total geral e por unidade. Cancelamentos ficam no histórico e não mudam os números já atribuídos. As peças anteriores com unidade cadastrada receberam seu número pela data de cadastro.
 
 ## 4. Ciclo de vida e permissões
 

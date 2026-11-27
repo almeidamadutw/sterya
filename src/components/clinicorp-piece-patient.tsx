@@ -189,6 +189,7 @@ export function ClinicorpPiecePatient({ units, laboratories, children }: {
             clearDetails();
           }
         }} />
+      <small>Vínculo com o cadastro do paciente.</small>
     </div>
     {loadingDetails && <p className="operations-patient-lookup operations-muted" role="status">Buscando procedimentos e próxima consulta…</p>}
     {details && 'error' in details && <p className="operations-patient-lookup notice error" role="alert">{errors[details.error]}</p>}

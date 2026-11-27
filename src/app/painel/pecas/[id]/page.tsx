@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { requireProfile } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 import { procedureNames, statusNames } from '@/lib/validation';
+import { cabinetBoxLabel } from '@/lib/piece-cabinet';
 import { movePiece, changePiecePriority } from '@/app/actions/pieces';
 
 export const metadata = { title: 'Detalhe da peça | STERYA' };
@@ -40,7 +41,7 @@ export default async function PieceDetail({
   const actor = await requireProfile();
   const supabase = await createClient();
   const { data: piece, error } = await supabase.from('pieces')
-    .select('id,tenant_id,unit_id,patient_name,clinicorp_patient_id,procedure_type,teeth,arch,laboratory_id,laboratory_reference,reference,status,priority,priority_reason,notes,next_appointment_at,expected_at,sent_at,lab_received_at,lab_dispatched_at,received_at,delivered_at,location,created_at,created_by,updated_by,received_by,delivered_by')
+    .select('id,tenant_id,unit_id,patient_name,clinicorp_patient_id,procedure_type,teeth,arch,laboratory_id,laboratory_reference,reference,cabinet_box,status,priority,priority_reason,notes,next_appointment_at,expected_at,sent_at,lab_received_at,lab_dispatched_at,received_at,delivered_at,location,created_at,created_by,updated_by,received_by,delivered_by')
     .eq('id',id).maybeSingle();
   if (error || !piece) notFound();
   const isLab = actor.role === 'laboratorio';
@@ -55,9 +56,18 @@ export default async function PieceDetail({
   const unitName = units?.find(u=>u.id===piece.unit_id)?.name ?? 'Unidade da clínica';
   const actions = (isLab ? labSteps : clinicSteps)[piece.status] ?? [];
   const query = await searchParams;
+  const box = cabinetBoxLabel(piece.cabinet_box);
+  const cabinetLocation = box == null ? undefined : 'Caixa ' + box + ' / armário';
+  const mayReceive = !isLab && actions.includes('receber_clinica');
+  const occupiedBox = mayReceive && piece.cabinet_box != null && piece.unit_id
+    ? await supabase.from('pieces').select('id', { count: 'exact', head: true })
+      .eq('tenant_id', piece.tenant_id).eq('unit_id', piece.unit_id).eq('cabinet_box', piece.cabinet_box)
+      .eq('status', 'recebida').neq('id', piece.id)
+    : null;
+  const warnOccupied = (occupiedBox?.count ?? 0) > 0;
   return <>
     <div className="page-heading"><div><span className="eyebrow"><Link href="/painel/pecas">Peças</Link> / {piece.reference}</span><h1>{piece.patient_name}<span className="heading-dot">.</span></h1><p>{procedureNames[piece.procedure_type] ?? piece.procedure_type} · {labName}</p></div><Link className="button secondary" href={`/etiquetas/${piece.id}`} target="_blank" rel="noopener noreferrer">Imprimir etiqueta 50 × 30 mm</Link></div>
-    {query.criada && <p className="notice success" role="status">Peça cadastrada com sucesso no banco real.</p>}
+    {query.criada && <p className="notice success" role="status">Peça cadastrada.{box != null && ' Caixa do armário: ' + box + '.'}</p>}
     {query.sucesso && <p className="notice success" role="status">Movimentação registrada no histórico, com data e responsável.</p>}
     {query.erro && <p className="notice error" role="alert">Operação recusada. Confira o status atual, as permissões e os campos obrigatórios.</p>}
     <div className="operations-info-grid">
@@ -68,6 +78,7 @@ export default async function PieceDetail({
           <p><b>Dente/região:</b> {piece.teeth?.join(', ') || piece.arch || 'Não informado'}</p>
           <p><b>Laboratório:</b> {labName}</p>
           {!isLab && <p><b>Unidade:</b> {unitName}</p>}
+          {!isLab && <p><b>Caixa do armário:</b> {box ?? 'Sem numeração'}</p>}
           <p><b>Código do laboratório:</b> {piece.laboratory_reference || 'Ainda não informado'}</p>
           <p><b>Próxima consulta:</b> {dateTime(piece.next_appointment_at)}</p>
           <p><b>Prazo esperado:</b> {dateOnly(piece.expected_at)}</p>
@@ -93,7 +104,11 @@ export default async function PieceDetail({
       <div className="operations-actions-grid">{actions.map(action=><form key={action} action={movePiece} className="operations-action-card">
         <input type="hidden" name="piece_id" value={piece.id}/><input type="hidden" name="action" value={action}/>
         <h3>{actionLabel[action]}</h3>
-        {action==='receber_clinica' && <div className="field"><label htmlFor="location">Onde a peça está guardada? *</label><input id="location" name="location" maxLength={160} required placeholder="Caixa 2 / armário"/></div>}
+        {action==='receber_clinica' && <div className="field">
+          <label htmlFor="location">Onde a peça está guardada? *</label>
+          <input id="location" name="location" maxLength={160} required defaultValue={warnOccupied ? undefined : cabinetLocation} placeholder={cabinetLocation ?? 'Caixa / armário'} />
+          {warnOccupied && <small role="status">Outra peça recebida tem a caixa {box}. Confira o armário e informe a localização usada.</small>}
+        </div>}
         {isLab && ['receber_laboratorio','despachar'].includes(action) && <div className="field"><label htmlFor={`laboratory_reference_${action}`}>Código do laboratório (se disponível)</label><input id={`laboratory_reference_${action}`} name="laboratory_reference" maxLength={100} defaultValue={piece.laboratory_reference ?? ''}/></div>}
         <div className="field"><label htmlFor={`note_${action}`}>Motivo / observação{['solicitar_revisao','cancelar','estornar_recebimento','estornar_entrega'].includes(action) ? ' *' : ''}</label><input id={`note_${action}`} name="note" maxLength={1000} required={['solicitar_revisao','cancelar','estornar_recebimento','estornar_entrega'].includes(action)} placeholder="Opcional, exceto revisão ou cancelamento"/></div>
         <button className="button primary" type="submit">{actionLabel[action]}</button>
