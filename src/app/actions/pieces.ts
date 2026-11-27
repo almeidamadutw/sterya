@@ -3,6 +3,8 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { requireProfile } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
+import { classifyPieceProcedure, parsePieceTeeth, pieceRoutingLabel, suggestPieceLaboratory, type PieceProcedureType } from '@/lib/piece-routing';
+import { procedureNames } from '@/lib/validation';
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const value = (data: FormData, key: string) => String(data.get(key) ?? '').trim();
@@ -20,17 +22,36 @@ export async function createPiece(form: FormData) {
   if (actor.role === 'laboratorio') redirect('/painel/pecas?erro=permissao');
   const supabase = await createClient();
   const teeth = value(form, 'teeth').split(/[\s,;]+/).map(s => s.trim()).filter(Boolean).slice(0, 32);
+  const type = value(form, 'procedure_type');
+  if (!Object.hasOwn(procedureNames, type)) redirect('/painel/pecas?erro=cadastro');
+  const stage = value(form, 'piece_stage');
+  const source = value(form, 'clinicorp_procedure_label').slice(0, 200);
+  const label = pieceRoutingLabel(type, classifyPieceProcedure(source) === type ? source : '', stage);
+  const { data: labs, error: labError } = await supabase.from('laboratories').select('id,name,active')
+    .eq('tenant_id', actor.tenant_id).eq('active', true);
+  if (labError) redirect('/painel/pecas?erro=laboratorio');
+  const recommended = suggestPieceLaboratory(type as PieceProcedureType, label, parsePieceTeeth(value(form, 'teeth')), labs ?? []);
+  const laboratoryId = value(form, 'laboratory_id') || recommended;
+  const userNote = value(form, 'notes');
+  const note = [type === 'ppr' && stage === 'infraestrutura' ? 'Etapa: infraestrutura de PPR.' : '', userNote];
+  if (recommended && laboratoryId !== recommended) {
+    const reason = value(form, 'laboratory_override_reason');
+    if (reason.length < 3 || reason.length > 200) redirect('/painel/pecas?erro=justificativa');
+    note.push('Laboratório sugerido: ' + labs?.find(lab => lab.id === recommended)?.name + '. Troca: ' + reason);
+  }
+  const combinedNote = note.filter(Boolean).join('\n');
+  if (combinedNote.length > 1000) redirect('/painel/pecas?erro=observacao');
   const { data, error } = await supabase.rpc('register_piece', {
     p_patient_name: value(form, 'patient_name'),
-    p_procedure_type: value(form, 'procedure_type'),
+    p_procedure_type: type,
     p_unit_id: value(form, 'unit_id'),
-    p_laboratory_id: value(form, 'laboratory_id'),
+    p_laboratory_id: laboratoryId,
     p_teeth: teeth,
     p_arch: maybe(value(form, 'arch')),
     p_expected_at: maybe(value(form, 'expected_at')),
     p_next_appointment_at: appointmentFromBrazil(value(form, 'next_appointment_at')),
     p_priority: form.get('priority') === 'on',
-    p_note: maybe(value(form, 'notes')),
+    p_note: maybe(combinedNote),
     p_clinicorp_patient_id: maybe(value(form, 'clinicorp_patient_id'))
   });
   if (error || !data) redirect('/painel/pecas?erro=cadastro');

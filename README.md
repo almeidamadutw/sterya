@@ -24,7 +24,7 @@ O acesso de suporte solicitado é `suporte@cpe.ceoclub`. A senha é definida com
 - Cadastro manual real de peças via painel `/painel/pecas`, com paciente, procedimento, dente/arcada, unidade, laboratório, prioridade e próxima consulta.
 - Movimentações persistentes: envio, confirmação no laboratório, início de produção, despacho, chegada física à clínica, entrega ao paciente, revisão, reenvio e cancelamento.
 - Estorno auditado de recebimento e entrega equivocados, com justificativa obrigatória. Histórico com usuário, perfil, status anterior e novo, horário e observação.
-- Página de detalhe de peça em `/painel/pecas/[id]` e etiqueta para impressão de 60 × 40 mm em `/etiquetas/[id]`, com três datas: envio, chegada à clínica e entrega ao paciente.
+- Página de detalhe de peça em `/painel/pecas/[id]` e etiqueta para impressão de 50 × 30 mm em `/etiquetas/[id]`, com três datas: envio, chegada à clínica e entrega ao paciente.
 - Controle de permissões no banco: funções privilegiadas em schema privado, RPCs invocadoras e políticas RLS para leitura por laboratório.
 - Migrações aplicadas ao Supabase STERYA e versionadas em `supabase/migrations/`.
 - Pipeline `Verificar STERYA` no GitHub Actions para typecheck, lint, testes e build. Validação de fluxo no Supabase realizada dentro de transação com rollback, sem registros sintéticos remanescentes.

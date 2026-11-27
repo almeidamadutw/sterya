@@ -27,23 +27,22 @@ export default async function Pieces({ searchParams }: { searchParams: Promise<{
   const params = await searchParams;
   return <>
     <div className="page-heading"><div><span className="eyebrow">CONTROLE PROTÉTICO</span><h1>Peças<span className="heading-dot">.</span></h1><p>Uma peça por registro, com histórico individual e recebimento confirmado.</p></div></div>
-    {params.erro && <p className="notice error" role="alert">Não foi possível concluir a operação. Confira os dados e suas permissões.</p>}
+    {params.erro && <p className="notice error" role="alert">
+      {params.erro === 'justificativa' ? 'Informe o motivo para trocar o laboratório sugerido.' :
+        params.erro === 'observacao' ? 'Reduza a observação para salvar a justificativa junto com a peça.' :
+        'Não foi possível concluir a operação. Confira os dados e suas permissões.'}
+    </p>}
     {!isLab && <details className="panel operations-create">
       <summary className="operations-summary">+ Cadastrar nova peça</summary>
-      <p className="operations-muted">Busque um paciente no Clinicorp ou preencha o nome manualmente.</p>
+      <p className="operations-muted">Selecione a unidade e busque o paciente para preencher a peça com os dados do Clinicorp.</p>
       {labs.length === 0 || units.length === 0
         ? <div className="notice error">Cadastre uma unidade e pelo menos um laboratório antes de criar peças.</div>
         : <form action={createPiece} className="operations-form">
-          <ClinicorpPiecePatient units={units} />
-          <div className="field"><label htmlFor="procedure_type">Procedimento *</label><select id="procedure_type" name="procedure_type" required>{Object.entries(procedureNames).map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></div>
-          <div className="field"><label htmlFor="laboratory_id">Laboratório *</label><select name="laboratory_id" id="laboratory_id" required><option value="">Selecione</option>{labs.filter(l=>l.active).map(l=><option key={l.id} value={l.id}>{l.name}</option>)}</select></div>
-          <div className="field"><label htmlFor="teeth">Dente(s) ou região</label><input id="teeth" name="teeth" maxLength={120} placeholder="11, 12, 21" /><small>Separe os dentes por vírgula. Cada peça deve ter seu próprio registro.</small></div>
-          <div className="field"><label htmlFor="arch">Arcada</label><select name="arch" id="arch"><option value="">Não se aplica</option><option value="superior">Superior</option><option value="inferior">Inferior</option><option value="ambas">Ambas</option></select></div>
-          <div className="field"><label htmlFor="expected_at">Prazo esperado para a peça</label><input id="expected_at" name="expected_at" type="date" /></div>
-          <div className="field"><label htmlFor="next_appointment_at">Próxima consulta</label><input id="next_appointment_at" name="next_appointment_at" type="datetime-local" /></div>
-          <div className="field"><label htmlFor="notes">Observações</label><input id="notes" name="notes" maxLength={1000} placeholder="Instruções para o laboratório" /></div>
-          <label className="operations-checkbox"><input type="checkbox" name="priority"/> Peça prioritária</label>
-          <div className="operations-actions"><button type="submit" className="button primary">Salvar peça no banco</button></div>
+          <ClinicorpPiecePatient units={units} laboratories={labs}>
+            <div className="field"><label htmlFor="expected_at">Prazo esperado para a peça</label><input id="expected_at" name="expected_at" type="date" /></div>
+            <div className="field"><label htmlFor="notes">Observações</label><input id="notes" name="notes" maxLength={1000} placeholder="Instruções para o laboratório" /></div>
+            <label className="operations-checkbox"><input type="checkbox" name="priority"/> Peça prioritária</label>
+          </ClinicorpPiecePatient>
         </form>}
     </details>}
     <section className="panel">

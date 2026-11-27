@@ -22,7 +22,7 @@ O catálogo de 27/11/2026 usa os nomes dos cadastros já existentes no CPE.
 | Laboratório Daiane Mota | Ortodontia e contenção | Tabela identificada como “Daiane Orto” |
 | Laboratório Eder | Infraestrutura da PPR | Etapa específica, possivelmente vinculada a uma PPR que seguirá para outro laboratório |
 
-A sugestão de laboratório é automática segundo o procedimento **e a etapa**, mas permite substituição autorizada e registra a justificativa. Não presumir que toda peça tenha exatamente um laboratório: a infraestrutura da PPR pode exigir fluxo em mais de um responsável.
+Em **Peças → Cadastrar nova peça**, o laboratório é preenchido segundo o procedimento e, quando necessário, a região ou a etapa. Uma troca da sugestão exige justificativa e fica registrada no histórico da peça. Não presumir que toda peça tenha exatamente um laboratório: a infraestrutura da PPR pode exigir fluxo em mais de um responsável.
 
 ## 3. Identificação por peça
 
@@ -133,4 +133,4 @@ Cada evento relevante deve registrar: ID da peça, evento/status anterior e novo
 
 ## 13. Não confundir protótipo com implementação
 
-A beta descrita em `docs/beta.md` ainda usa dados fictícios e simulação no navegador. Já foram implantados em 25/11/2026 o **cadastro manual real de peças**, as **movimentações persistentes com auditoria e estorno**, a **visão de peças por laboratório com RLS**, a **etiqueta 60 × 40 mm imprimível via navegador** (três datas) e o **catálogo real de materiais por especialidade**. A atualização de 27/11/2026 acrescenta o catálogo de preços fixos para consulta interna. O login operacional de cada laboratório ainda exige a emissão de seus códigos pela gestão, e a impressão física depende de teste com a Ablemark. Seguem pendentes a edição completa de peças, a integração e criação automática via Clinicorp, a definição de valor por peça ou etapa, os tetos mensais, a integração com o LYRVA e os testes da interface publicada.
+A beta descrita em `docs/beta.md` ainda usa dados fictícios e simulação no navegador. Já foram implantados em 25/11/2026 o **cadastro manual real de peças**, as **movimentações persistentes com auditoria e estorno**, a **visão de peças por laboratório com RLS**, a **etiqueta 50 × 30 mm imprimível via navegador** (três datas) e o **catálogo real de materiais por especialidade**. A atualização de 27/11/2026 acrescenta o catálogo de preços fixos para consulta interna. O login operacional de cada laboratório ainda exige a emissão de seus códigos pela gestão, e a impressão física depende de teste com a Ablemark. Seguem pendentes a edição completa de peças, a criação automática de peças via Clinicorp, a definição de valor por peça ou etapa, os tetos mensais, a integração com o LYRVA e os testes da interface publicada.

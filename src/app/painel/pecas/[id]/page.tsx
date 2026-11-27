@@ -56,7 +56,7 @@ export default async function PieceDetail({
   const actions = (isLab ? labSteps : clinicSteps)[piece.status] ?? [];
   const query = await searchParams;
   return <>
-    <div className="page-heading"><div><span className="eyebrow"><Link href="/painel/pecas">Peças</Link> / {piece.reference}</span><h1>{piece.patient_name}<span className="heading-dot">.</span></h1><p>{procedureNames[piece.procedure_type] ?? piece.procedure_type} · {labName}</p></div><Link className="button secondary" href={`/etiquetas/${piece.id}`} target="_blank" rel="noopener noreferrer">Imprimir etiqueta 60 × 40</Link></div>
+    <div className="page-heading"><div><span className="eyebrow"><Link href="/painel/pecas">Peças</Link> / {piece.reference}</span><h1>{piece.patient_name}<span className="heading-dot">.</span></h1><p>{procedureNames[piece.procedure_type] ?? piece.procedure_type} · {labName}</p></div><Link className="button secondary" href={`/etiquetas/${piece.id}`} target="_blank" rel="noopener noreferrer">Imprimir etiqueta 50 × 30 mm</Link></div>
     {query.criada && <p className="notice success" role="status">Peça cadastrada com sucesso no banco real.</p>}
     {query.sucesso && <p className="notice success" role="status">Movimentação registrada no histórico, com data e responsável.</p>}
     {query.erro && <p className="notice error" role="alert">Operação recusada. Confira o status atual, as permissões e os campos obrigatórios.</p>}

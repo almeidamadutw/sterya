@@ -48,17 +48,19 @@ O mapeamento de laboratórios, etapas por peça, **decisão de adiar a precifica
 - Envio, recebimento no laboratório, produção, despacho, recebimento físico na clínica, entrega e revisão com registros auditáveis.
 - Estornos de recebimento e entrega com motivo obrigatório.
 - Cinco laboratórios informados cadastrados no banco; visibilidade das peças dos laboratórios sujeita a perfil e RLS.
-- Etiqueta HTML 60 × 40 mm imprimível pelo navegador, com nome do paciente, tipo, dente/arcada, códigos e três datas.
+- Etiqueta HTML 50 × 30 mm imprimível pelo navegador, com nome do paciente, tipo, dente/arcada, códigos e três datas.
 - Catálogo real de materiais importado do PDF, com pesquisa, versões, filtro por grupo e rastreabilidade da origem. Sem acesso por laboratório externo.
-- Busca de paciente Clinicorp no cadastro de peças, condicionada à configuração da unidade. Agenda do Clinicorp e integração LYRVA permanecem pendentes.
+- Consulta de pacientes, procedimentos e próxima consulta do Clinicorp no cadastro de peças, conforme a configuração da unidade. Sincronização integral da agenda e integração LYRVA permanecem pendentes.
 - A liberação operacional depende de testes de navegador publicado, impressora e usuários autorizados.
 
 ## Busca de paciente para cadastro de peça
 
-Em **Peças → Cadastrar nova peça**, escolha a unidade e busque pelo nome completo ou ID do Clinicorp. Selecione o resultado para preencher o nome e o ID na peça. A consulta usa `GET /patient/get` e guarda somente os dados previstos no cadastro da peça. A busca não cria cadastro no Clinicorp, e o preenchimento manual permanece disponível. A agenda e a importação automática de peças são integrações separadas.
+Em **Peças → Cadastrar nova peça**, escolha a unidade e busque pelo nome completo ou ID do Clinicorp. Selecione o resultado para preencher o nome e o ID na peça. A consulta usa `GET /patient/get` e guarda somente os dados previstos no cadastro da peça. A busca não cria cadastro no Clinicorp, e o preenchimento manual permanece disponível. O CPE preenche a próxima consulta futura dessa unidade, em horário de Brasília, se houver agendamento nos próximos 12 meses. O procedimento vem da agenda (desde sete dias atrás) ou, na ausência de um procedimento identificado na agenda, dos orçamentos aprovados nos últimos 30 dias. Quando há mais de uma opção, escolha o procedimento da peça. O CPE sugere o laboratório a partir das regras de especialidade e da região ou etapa disponível. As escolhas podem ser corrigidas antes de salvar.
 
 ### Configurar a conexão
 
 Cadastre as credenciais no Supabase do CPE, em **Edge Functions → Secrets**. Para Salto, use `CLINICORP_SALTO_API_USERNAME`, `CLINICORP_SALTO_API_TOKEN` e `CLINICORP_SALTO_SUBSCRIBER_ID`. Para Sorocaba, substitua `SALTO` por `SOROCABA`. A configuração global legada (`CLINICORP_API_USERNAME`, `CLINICORP_API_TOKEN` e `CLINICORP_SUBSCRIBER_ID`) é aceita para Salto no CPE e não ativa Sorocaba.
 
 Também é possível usar `CLINICORP_UNIT_CONFIG` com o UUID de cada unidade do CPE, no formato de `.env.example`. A mesma variável, se já configurada no servidor da Vercel, continua funcionando. A API busca pacientes no assinante, sem filtro de unidade nesse endpoint. Quando duas unidades usam o mesmo assinante, o Clinicorp pode retornar o mesmo cadastro para ambas.
+
+Os IDs Clinicorp de Salto e Sorocaba estão vinculados à tabela `units` do CPE, pois o Clinicorp pode usar o mesmo nome de clínica em ambas as unidades. A consulta de agenda filtra por paciente e clínica. Para uma unidade sem ID no banco, o sistema aceita o ID do Clinicorp no Secret `CLINICORP_SALTO_BUSINESS_ID` ou `CLINICORP_SOROCABA_BUSINESS_ID` e, na ausência dele, só usa a identificação pelo nome se houver uma correspondência única.
