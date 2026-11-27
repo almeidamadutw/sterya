@@ -1,10 +1,17 @@
+import type { PieceRegion } from '../../supabase/functions/cpe-clinicorp-lookup/piece-procedure.ts';
+
 export {
-  classifyPieceProcedure, parsePieceArch, parsePieceTeeth, suggestPieceLaboratory,
+  classifyPieceProcedure, parsePieceArch, parsePieceTeeth, pieceRegion, suggestPieceLaboratory,
 } from '../../supabase/functions/cpe-clinicorp-lookup/piece-procedure.ts';
-export type { PieceArch, PieceProcedureType } from '../../supabase/functions/cpe-clinicorp-lookup/piece-procedure.ts';
+export type { PieceArch, PieceProcedureType, PieceRegion } from '../../supabase/functions/cpe-clinicorp-lookup/piece-procedure.ts';
 export type { ClinicorpPieceCandidate, ClinicorpProcedureResult } from '../../supabase/functions/cpe-clinicorp-lookup/procedures.ts';
 
-export function pieceRoutingLabel(type: string, sourceLabel: string, stage: string) {
+export function isPieceRegion(value: string): value is PieceRegion {
+  return value === 'anterior' || value === 'posterior';
+}
+
+export function pieceRoutingLabel(type: string, sourceLabel: string, stage: string, region = '') {
+  if (type === 'ppf_lente' && isPieceRegion(region)) return 'PPF ' + region;
   if (type === 'ppr' && stage === 'infraestrutura') return 'Infraestrutura de PPR';
   if (type === 'ppr' && stage === 'completa') return 'PPR';
   return sourceLabel;

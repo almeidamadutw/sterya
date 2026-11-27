@@ -1,11 +1,11 @@
 'use client';
 
-import { useRef, useState, type ReactNode } from 'react';
+import { Fragment, useRef, useState, type ReactNode } from 'react';
 import { getClinicorpPieceProcedures, searchClinicorpPatient } from '@/app/actions/clinicorp';
 import type { ClinicorpLookupResult, ClinicorpPatient } from '@/lib/clinicorp-lookup';
 import {
-  appointmentInputValue, parsePieceTeeth, pieceRoutingLabel, suggestPieceLaboratory,
-  type ClinicorpPieceCandidate, type ClinicorpProcedureResult, type PieceProcedureType,
+  appointmentInputValue, isPieceRegion, parsePieceTeeth, pieceRegion, pieceRoutingLabel, suggestPieceLaboratory,
+  type ClinicorpPieceCandidate, type ClinicorpProcedureResult, type PieceProcedureType, type PieceRegion,
 } from '@/lib/piece-routing';
 import { procedureNames } from '@/lib/validation';
 
@@ -20,6 +20,7 @@ const errors: Record<Extract<ClinicorpProcedureResult, { error: string }>['error
 };
 
 type Laboratory = { id: string; name: string; active: boolean };
+type ProcedureOption = PieceProcedureType | PieceRegion | '';
 
 export function ClinicorpPiecePatient({ units, laboratories, children }: {
   units: { id: string; name: string }[];
@@ -38,16 +39,22 @@ export function ClinicorpPiecePatient({ units, laboratories, children }: {
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [details, setDetails] = useState<ClinicorpProcedureResult | null>(null);
   const [candidate, setCandidate] = useState<ClinicorpPieceCandidate | null>(null);
-  const [procedure, setProcedure] = useState<PieceProcedureType | ''>('');
+  const [procedureOption, setProcedureOption] = useState<ProcedureOption>('');
   const [teeth, setTeeth] = useState('');
   const [arch, setArch] = useState('');
   const [pprStage, setPprStage] = useState('');
   const [override, setOverride] = useState<string | null>(null);
   const [appointment, setAppointment] = useState('');
 
-  const label = pieceRoutingLabel(procedure, candidate?.label ?? '', pprStage);
+  const hasSelectedRegion = isPieceRegion(procedureOption);
+  const selectedRegion = hasSelectedRegion ? procedureOption : '';
+  const procedure = hasSelectedRegion ? 'ppf_lente' : procedureOption;
+  const label = pieceRoutingLabel(procedure, candidate?.label ?? '', pprStage, selectedRegion);
+  const parsedTeeth = parsePieceTeeth(teeth);
+  const identifiedRegion = procedure === 'ppf_lente' ? pieceRegion(label, parsedTeeth) : null;
+  const displayedProcedure = selectedRegion || identifiedRegion || procedure;
   const suggestedLab = procedure
-    ? suggestPieceLaboratory(procedure, label, parsePieceTeeth(teeth), laboratories) : null;
+    ? suggestPieceLaboratory(procedure, label, parsedTeeth, laboratories) : null;
   const laboratory = override ?? suggestedLab ?? '';
   const changedSuggestion = Boolean(suggestedLab && laboratory && suggestedLab !== laboratory);
   const automaticAppointment = details && 'nextAppointment' in details
@@ -64,7 +71,7 @@ export function ClinicorpPiecePatient({ units, laboratories, children }: {
     setLoadingDetails(false);
     setDetails(null);
     setCandidate(null);
-    setProcedure('');
+    setProcedureOption('');
     setTeeth('');
     setArch('');
     setPprStage('');
@@ -74,7 +81,7 @@ export function ClinicorpPiecePatient({ units, laboratories, children }: {
 
   function applyProcedure(item: ClinicorpPieceCandidate) {
     setCandidate(item);
-    setProcedure(item.type);
+    setProcedureOption(item.type);
     setTeeth(item.teeth.join(', '));
     setArch(item.arch ?? '');
     setPprStage('');
@@ -213,22 +220,28 @@ export function ClinicorpPiecePatient({ units, laboratories, children }: {
       </p>}
     </>}
     <input type="hidden" name="clinicorp_procedure_label" value={candidate?.label ?? ''} />
+    <input type="hidden" name="procedure_type" value={procedure} />
+    <input type="hidden" name="piece_region" value={selectedRegion} />
     <div className="field">
       <label htmlFor="procedure_type">Procedimento *</label>
-      <select id="procedure_type" name="procedure_type" required disabled={loadingDetails} value={procedure}
+      <select id="procedure_type" required disabled={loadingDetails} value={displayedProcedure}
         onChange={event => {
-          const value = event.target.value as PieceProcedureType | '';
-          setProcedure(value);
-          if (candidate) {
+          const option = event.target.value as ProcedureOption;
+          setProcedureOption(option);
+          if (candidate && !(procedure === 'ppf_lente' && isPieceRegion(option))) {
             setTeeth('');
             setArch('');
           }
           setCandidate(null);
-          setPprStage(value === 'ppr' ? 'completa' : '');
+          setPprStage(option === 'ppr' ? 'completa' : '');
           setOverride(null);
         }}>
         <option value="">Selecione</option>
-        {Object.entries(procedureNames).map(([key, display]) => <option key={key} value={key}>{display}</option>)}
+        {Object.entries(procedureNames).map(([key, display]) => key === 'ppf_lente' ? <Fragment key={key}>
+          {displayedProcedure === key && <option value={key} disabled>{display} (região a definir)</option>}
+          <option value="anterior">{display} anterior</option>
+          <option value="posterior">{display} posterior</option>
+        </Fragment> : <option key={key} value={key}>{display}</option>)}
       </select>
       {candidate && <small>Clinicorp: {candidate.label} · {candidate.source === 'agenda' ? 'Agenda' : 'Orçamento aprovado'}</small>}
     </div>
@@ -239,8 +252,10 @@ export function ClinicorpPiecePatient({ units, laboratories, children }: {
         <option value="">Selecione</option>
         {laboratories.filter(item => item.active).map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
       </select>
-      {suggestedLab && !changedSuggestion && <small>Preenchido pela regra do procedimento.</small>}
-      {procedure === 'ppf_lente' && !suggestedLab && <small>Informe os dentes para identificar a região anterior ou posterior.</small>}
+      {suggestedLab && !changedSuggestion && <small>Laboratório preferencial. Você pode trocar.</small>}
+      {procedure === 'ppf_lente' && !identifiedRegion && <small>{selectedRegion
+        ? 'Confira se os dentes correspondem à região escolhida.'
+        : 'Selecione PPF / lente anterior ou posterior para preencher o laboratório.'}</small>}
     </div>
     {changedSuggestion && <div className="field">
       <label htmlFor="laboratory_override_reason">Motivo para trocar o laboratório *</label>
@@ -260,10 +275,7 @@ export function ClinicorpPiecePatient({ units, laboratories, children }: {
     <div className="field">
       <label htmlFor="teeth">Dente(s) ou região</label>
       <input id="teeth" name="teeth" maxLength={120} placeholder="11, 12, 21" value={teeth}
-        disabled={loadingDetails} onChange={event => {
-          setTeeth(event.target.value);
-          setOverride(null);
-        }} />
+        disabled={loadingDetails} onChange={event => setTeeth(event.target.value)} />
       <small>Separe os dentes por vírgula. Cada peça deve ter seu próprio registro.</small>
     </div>
     <div className="field">

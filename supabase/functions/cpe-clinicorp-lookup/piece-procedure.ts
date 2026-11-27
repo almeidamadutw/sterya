@@ -1,8 +1,8 @@
 export type PieceProcedureType = 'ppf_lente' | 'pt' | 'protocolo' | 'ppr' | 'onlay' | 'psi' | 'contencao';
 export type PieceArch = 'superior' | 'inferior' | 'ambas';
+export type PieceRegion = 'anterior' | 'posterior';
 
 type Laboratory = { id: string; name: string; active: boolean };
-type Region = 'anterior' | 'posterior';
 
 const fdiPattern = /^(?:[1-4][1-8]|[5-8][1-5])$/;
 const normalize = (label: string) => label.normalize('NFD')
@@ -62,7 +62,7 @@ export function classifyPieceProcedure(label: string): PieceProcedureType | null
   return candidates.length === 1 ? candidates[0] : null;
 }
 
-function pieceRegion(label: string, teeth: string[]): Region | null {
+export function pieceRegion(label: string, teeth: string[]): PieceRegion | null {
   const text = normalize(label);
   const anterior = /\b(?:anterior(?:es)?|ant)\b/.test(text);
   const posterior = /\b(?:posterior(?:es)?|post)\b/.test(text);
@@ -71,7 +71,7 @@ function pieceRegion(label: string, teeth: string[]): Region | null {
 
   const parsed = parsePieceTeeth(teeth);
   if (teeth.length > 0 && parsed.length === 0) return null;
-  const regions = new Set<Region>(parsed.map(tooth => Number(tooth[1]) <= 3 ? 'anterior' : 'posterior'));
+  const regions = new Set<PieceRegion>(parsed.map(tooth => Number(tooth[1]) <= 3 ? 'anterior' : 'posterior'));
   if (regions.size > 1) return null;
   const toothRegion = regions.values().next().value ?? null;
   if (labelRegion && toothRegion && labelRegion !== toothRegion) return null;
