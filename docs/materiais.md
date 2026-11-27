@@ -48,3 +48,11 @@ O PDF e sua carga completa não são versionados no repositório público. O ban
 O catálogo importado não tinha saldos ou unidades de medida. Eles são informados pela equipe a partir da contagem real. Para a Ana aprovar, o acesso dela deve estar ativo com perfil Gestão.
 
 O botão **Cadastrar item** na aba de compras abre o mesmo cadastro disponível durante a montagem de um pedido. Use os grupos **Essenciais** e **Outras compras** para itens como papel higiênico. O item salvo fica no catálogo e pode ser usado na lista atual sem perder as informações já preenchidas.
+
+## Painel de compras e compra assistida
+
+Abra **Compras e estoque** no menu. Os atalhos levam ao catálogo com saldos, à lista de pedidos e aos pedidos que aguardam recebimento. A fila mostra a próxima ação de cada pedido. O filtro de unidade acompanha a paginação e é levado aos atalhos e ao formulário de novo pedido.
+
+Quando a gestão aprovar um pedido, abra **Comprar pelo iFood** no detalhe dele e selecione **Copiar lista aprovada**. A lista inclui nome, variante, quantidade e unidade de medida do pedido. Se a cópia automática estiver bloqueada pelo navegador, a tela exibe o texto para cópia manual.
+
+Cole o link de compartilhamento do mercado para abri-lo em outra aba ou use **Buscar mercado no iFood**. Confira o endereço da unidade, os produtos, os preços e o frete no iFood e finalize a compra por lá. Volte ao STERYA para registrar o código e, quando a entrega chegar, confirme as quantidades recebidas.

@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { advanceOrder } from '@/app/actions/material-operations';
+import { AssistedPurchase } from '@/components/assisted-purchase';
 import { MaterialOperationForm } from '@/components/material-operation-form';
+import { formatApprovedPurchase } from '@/lib/assisted-purchase';
 import { requireProfile } from '@/lib/auth';
 import { materialBase, materialDate, materialQuantity, orderActions, orderBase, orderPriorityLabel, orderStates, validMaterialId } from '@/lib/materials';
 import { createClient } from '@/lib/supabase/server';
@@ -40,7 +42,7 @@ export default async function OrderDetailPage({ params, searchParams }: {
     <div className="page-heading">
       <div><span className="eyebrow">{orderStates[request.state]}</span><h1>{request.code}</h1>
         <p>{unit} · Solicitado por {request.requested_by_name} · {materialDate.format(new Date(request.created_at))}</p></div>
-      <Link className="button secondary" href={orderBase}>Voltar aos pedidos</Link>
+      <Link className="button secondary" href={orderBase + '?unidade=' + request.unit_id}>Voltar aos pedidos</Link>
     </div>
     {novo === '1' && <p className="notice" role="status">Pedido enviado para aprovação.</p>}
     <section className="panel">
@@ -52,7 +54,7 @@ export default async function OrderDetailPage({ params, searchParams }: {
       <div className="table-scroll"><table>
         <thead><tr><th>Material</th><th>Pedido</th><th>Recebido</th><th>Pendente</th></tr></thead>
         <tbody>{items.data.map(item => <tr key={item.material_id}>
-          <td><Link href={materialBase + '/' + item.material_id}>{item.material_name}</Link> {item.material_variant}</td>
+          <td><Link href={materialBase + '/' + item.material_id + '?unidade=' + request.unit_id}>{item.material_name}</Link> {item.material_variant}</td>
           <td>{materialQuantity.format(item.quantity)} {item.measure}</td>
           <td>{materialQuantity.format(item.received)} {item.measure}</td>
           <td>{materialQuantity.format(remaining(item.quantity, item.received))} {item.measure}</td>
@@ -72,6 +74,7 @@ export default async function OrderDetailPage({ params, searchParams }: {
         </MaterialOperationForm>
       </div> : <p>O pedido aguarda aprovação da Gestão.</p>}
     </section>}
+    {request.state === 'aprovado' && items.data.length > 0 && <AssistedPurchase list={formatApprovedPurchase(items.data)} />}
     {request.state === 'aprovado' && <section className="panel">
       <div className="section-title"><h2>Registrar compra</h2></div>
       <MaterialOperationForm action={advanceOrder} label="Marcar como comprado">

@@ -9,12 +9,13 @@ import { materialBase, orderPriorities, type MaterialGroup, type PurchaseItem } 
 
 type OrderRow = { key: number; material: string };
 
-export function MaterialOrderComposer({ materials, units, groups, essentials, initial, startWithRegistration }: {
+export function MaterialOrderComposer({ materials, units, groups, essentials, initial, initialUnit, startWithRegistration }: {
   materials: PurchaseItem[];
   units: { id: string; name: string }[];
   groups: MaterialGroup[];
   essentials?: string;
   initial?: string;
+  initialUnit?: string;
   startWithRegistration: boolean;
 }) {
   const [savedItems, setSavedItems] = useState<PurchaseItem[]>([]);
@@ -47,7 +48,7 @@ export function MaterialOrderComposer({ materials, units, groups, essentials, in
     <MaterialOperationForm action={requestOrder} label="Enviar para aprovação">
       <div className="material-form-grid">
         <label className="field">Unidade que vai receber
-          <select name="unit_id" defaultValue="" required>
+          <select name="unit_id" defaultValue={initialUnit ?? ''} required>
             <option value="" disabled>Selecione a unidade</option>
             {units.map(unit => <option value={unit.id} key={unit.id}>{unit.name}</option>)}
           </select>

@@ -40,8 +40,8 @@ export default async function MaterialPage({ params, searchParams }: {
     <div className="page-heading">
       <div><span className="eyebrow">{material.code}</span><h1>{material.name}</h1>{material.variant && <p>{material.variant}</p>}</div>
       <div className="material-toolbar">
-        <Link className="button secondary" href={materialBase}>Voltar ao catálogo</Link>
-        {material.purchase_unit && <Link className="button primary" href={orderBase + '/novo?material=' + id}>Pedir material</Link>}
+        <Link className="button secondary" href={materialBase + (search.unidade === unit?.id && unit ? '?unidade=' + unit.id : '')}>Voltar ao catálogo</Link>
+        {material.purchase_unit && <Link className="button primary" href={orderBase + '/novo?material=' + id + (unit ? '&unidade=' + unit.id : '')}>Pedir material</Link>}
       </div>
     </div>
     {search.novo === '1' && <p className="notice" role="status">Material cadastrado.</p>}

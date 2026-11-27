@@ -44,3 +44,52 @@
 .badge.purchase-priority-2 { color: #80521b; background: #fff5df; border-color: #f1dab1; }
 .badge.purchase-priority-3 { color: #982f43; background: #fdf0f1; border-color: #efd3da; }
 .purchase-order-note { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+.purchase-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.purchase-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #dce4f0;
+  border-radius: 14px;
+  padding: 16px;
+  background: #fff;
+  color: var(--navy);
+  text-decoration: none;
+}
+.purchase-shortcut:hover, .purchase-shortcut:focus-visible {
+  border-color: #7c9fdf;
+  background: #f5f8ff;
+}
+.purchase-shortcut-icon {
+  display: grid;
+  flex: 0 0 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 10px;
+  background: #eaf1ff;
+  color: #255bad;
+}
+.purchase-shortcut strong, .purchase-shortcut small { display: block; }
+.purchase-shortcut strong { font-size: 14px; }
+.purchase-shortcut small { color: #536788; font-size: 12px; margin-top: 5px; }
+.purchase-market-field { max-width: 560px; }
+.purchase-market-field input, .assisted-purchase textarea { width: 100%; }
+.assisted-purchase textarea {
+  font: inherit;
+  padding: 12px;
+  border: 1px solid #cbd2e0;
+  border-radius: 9px;
+  resize: vertical;
+}
+.assisted-purchase .purchase-copy-status { color: #264f86; }
+.purchase-market-field input[aria-invalid="true"] { border-color: #982f43; }
+.assisted-purchase .purchase-market-return { margin: 14px 0 0; }
+@media (max-width: 760px) {
+  .purchase-shortcuts { grid-template-columns: 1fr; gap: 9px; }
+}
