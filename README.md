@@ -29,7 +29,7 @@ O acesso de suporte solicitado é `suporte@cpe.ceoclub`. A senha é definida com
 - Migrações aplicadas ao Supabase STERYA e versionadas em `supabase/migrations/`.
 - Pipeline `Verificar STERYA` no GitHub Actions para typecheck, lint, testes e build. Validação de fluxo no Supabase realizada dentro de transação com rollback, sem registros sintéticos remanescentes.
 
-**Não concluído:** sincronização com Clinicorp, estoque e pedidos de compra, geração automática de ficha/OS, testes físicos da impressora, testes de navegador publicados e cadastro de usuários individuais dos laboratórios. A beta segue fictícia.
+**Não concluído:** sincronização com Clinicorp, geração automática de ficha/OS, testes físicos da impressora, testes de navegador publicados e cadastro de usuários individuais dos laboratórios. A beta segue fictícia.
 
 **Precificação permanece suspensa:** normalmente manual por etapa-peça, mas deve-se consultar a Ellis sobre a planilha de valores fixos antes de desenvolver qualquer cálculo ou campo financeiro.
 
@@ -40,7 +40,7 @@ O acesso de suporte solicitado é `suporte@cpe.ceoclub`. A senha é definida com
 - Tamanhos e versões explícitos separados em cadastros próprios; descrição original preservada para conferência.
 - Importação rastreável, sem duplicações, com uma especificação de medida sinalizada para revisão.
 - Consulta restrita à equipe, gestão e suporte da própria clínica; catálogo indisponível aos laboratórios externos.
-- Quantidades, saldos, preços e unidades de compra permanecem sem preenchimento, pois não constam na lista. Compras e aprovações ainda serão implementadas.
+- Quantidades, saldos, preços e unidades de compra permanecem sem preenchimento, pois não constam na lista. O painel aceita cadastro e edição de itens, saldo e movimentações por unidade, pedidos com aprovação da gestão, registro da compra e recebimentos parciais ou totais.
 
 Os dados completos do PDF ficam no banco da clínica, fora do repositório público. Consulte [Catálogo de materiais](docs/materiais.md).
 

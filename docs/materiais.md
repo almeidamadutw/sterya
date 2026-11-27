@@ -26,7 +26,7 @@ As versões claras, como tamanhos de luvas, fio retrator com zeros à esquerda e
 
 A pesquisa aceita nome, tamanho, versão ou código, sem diferenciar acentos ou maiúsculas. O filtro por grupo pode ser combinado com a busca. A listagem mostra até 40 itens por página.
 
-Suporte, gestão e equipe consultam o catálogo da própria clínica. Laboratórios externos não têm acesso. As três tabelas têm RLS; clientes autenticados recebem apenas leitura, sem escrita direta. O catálogo ainda não oferece edição manual, controle de estoque, pedidos de compra ou aprovações.
+Suporte, gestão e equipe consultam o catálogo da própria clínica. Laboratórios externos não têm acesso. As três tabelas têm RLS; clientes autenticados recebem apenas leitura, sem escrita direta. A equipe pode cadastrar e editar materiais e registrar entradas e baixas pela interface. As escritas passam por rotinas transacionais que validam o perfil e a clínica.
 
 ## Estrutura e importação
 
@@ -37,3 +37,12 @@ Suporte, gestão e equipe consultam o catálogo da própria clínica. Laboratór
 Chaves compostas mantêm material, categoria e importação na mesma clínica. A unicidade usa clínica, grupo, nome e variante normalizados; reenviar a mesma carga não cria duplicações. O hash do documento impede uma segunda importação independente da mesma fonte. Não há endpoint de importação aberto ao cliente.
 
 O PDF e sua carga completa não são versionados no repositório público. O banco mantém o catálogo operacional e sua origem; o Git guarda a migração do esquema, a interface e a documentação técnica.
+
+## Estoque e compras
+
+1. Em Materiais, cadastre a unidade de medida de cada item (por exemplo, caixa). A unidade de medida é fixa após o uso em estoque ou em um pedido.
+2. Em Estoque e edição, selecione a unidade da clínica e lance o saldo inicial, entrada avulsa ou baixa. Cada lançamento guarda motivo, responsável, horário e saldo. O estoque não aceita baixa acima do saldo.
+3. Em Pedidos de compra, selecione uma unidade e inclua um ou mais materiais com quantidade. O perfil Gestão aprova ou recusa o pedido. A equipe registra o código da compra e confirma as quantidades entregues.
+4. Cada recebimento soma ao estoque da unidade indicada no pedido. Entregas parciais deixam o pedido aberto até completar todos os itens. O histórico registra os responsáveis e as observações por etapa.
+
+O catálogo importado não tinha saldos ou unidades de medida. Eles são informados pela equipe a partir da contagem real. Para a Ana aprovar, o acesso dela deve estar ativo com perfil Gestão.
