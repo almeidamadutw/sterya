@@ -20,7 +20,7 @@ PPF/lente, PT, protocolo, PPR, onlay e PSI. O controle deve funcionar de um úni
 
 ## Agenda e Clinicorp
 
-A primeira tela operacional deverá responder: quem vem hoje, qual peça precisa e se a peça já está na clínica. A integração deve atualizar registros sem duplicar, manter vínculo com a unidade e preservar histórico. Rotas, permissões e disponibilidade dos endpoints do Clinicorp precisam ser verificados antes de implementar. Não há integração Clinicorp ativa nesta versão.
+A primeira tela operacional deverá responder: quem vem hoje, qual peça precisa e se a peça já está na clínica. A integração deve atualizar registros sem duplicar, manter vínculo com a unidade e preservar histórico. Rotas, permissões e disponibilidade dos endpoints do Clinicorp precisam ser verificados antes de implementar. A busca de pacientes para cadastrar uma peça pode ser configurada separadamente, conforme a seção abaixo.
 
 ## Pedidos de materiais
 
@@ -50,5 +50,13 @@ O mapeamento de laboratórios, etapas por peça, **decisão de adiar a precifica
 - Cinco laboratórios informados cadastrados no banco; visibilidade das peças dos laboratórios sujeita a perfil e RLS.
 - Etiqueta HTML 60 × 40 mm imprimível pelo navegador, com nome do paciente, tipo, dente/arcada, códigos e três datas.
 - Catálogo real de materiais importado do PDF, com pesquisa, versões, filtro por grupo e rastreabilidade da origem. Sem acesso por laboratório externo.
-- Integrações Clinicorp e LYRVA permanecem pendentes.
+- Busca de paciente Clinicorp no cadastro de peças, condicionada à configuração da unidade. Agenda do Clinicorp e integração LYRVA permanecem pendentes.
 - A liberação operacional depende de testes de navegador publicado, impressora e usuários autorizados.
+
+## Busca de paciente para cadastro de peça
+
+Em **Peças → Cadastrar nova peça**, escolha a unidade e busque pelo nome completo ou ID do Clinicorp. Selecione o resultado para preencher o nome e o ID na peça. A consulta usa `GET /patient/get` e guarda somente os dados previstos no cadastro da peça. A busca não cria cadastro no Clinicorp, e o preenchimento manual permanece disponível. A agenda e a importação automática de peças são integrações separadas.
+
+### Configurar a conexão
+
+No projeto Vercel do CPE, configure `CLINICORP_UNIT_CONFIG` como variável sensível de servidor no ambiente de produção, com o UUID de cada unidade do CPE e as credenciais de leitura do assinante correspondente. O formato está em `.env.example`. A configuração é por UUID porque a API busca pacientes no assinante, sem filtro de unidade no endpoint. Quando duas unidades usam o mesmo assinante, o Clinicorp pode retornar o mesmo cadastro para ambas. Escolha a unidade da peça conforme o atendimento. Depois de configurar a variável, publique uma nova versão para ativá-la.
