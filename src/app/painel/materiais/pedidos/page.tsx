@@ -62,7 +62,7 @@ export default async function OrdersPage({ searchParams }: {
         <span><strong>{shortcut.title}</strong><small>{shortcut.text}</small></span>
       </Link>)}
     </nav>
-    <form className="material-list-filter" action={orderBase} method="get">
+    <form key={orderListLink(state, priority)} className="material-list-filter" action={orderBase} method="get">
       <label className="field">Unidade
         <select name="unidade" defaultValue={unitId ?? ''}>
           <option value="">Todas as unidades</option>
