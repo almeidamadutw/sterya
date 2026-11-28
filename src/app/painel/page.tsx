@@ -13,14 +13,18 @@ export default async function Dashboard() {
   const { start, end } = pieceYearRange(year);
   const annualPieces = () => supabase.from('pieces').select('id', { count: 'exact', head: true })
     .eq('tenant_id', profile.tenant_id).gte('created_at', start).lt('created_at', end);
-  const [counts, annual, units] = await Promise.all([
-    Promise.all(statuses.map(status => supabase.from('pieces').select('id', { count: 'exact', head: true }).in('status', status))),
+  async function countByUnit() {
+    const units = await supabase.from('units').select('id,name').eq('tenant_id', profile.tenant_id).order('name');
+    return Promise.all((units.data ?? []).map(async unit => ({
+      ...unit, ...(await annualPieces().eq('unit_id', unit.id)),
+    })));
+  }
+  const [counts, annual, unitCounts] = await Promise.all([
+    Promise.all(statuses.map(status => supabase.from('pieces').select('id', { count: 'exact', head: true })
+      .eq('tenant_id', profile.tenant_id).in('status', status))),
     annualPieces(),
-    supabase.from('units').select('id,name').eq('tenant_id', profile.tenant_id).order('name'),
+    countByUnit(),
   ]);
-  const unitCounts = await Promise.all((units.data ?? []).map(async unit => ({
-    ...unit, ...(await annualPieces().eq('unit_id', unit.id)),
-  })));
   const failed = counts.some(result => result.error);
   const today = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'long', timeZone: 'America/Sao_Paulo' }).format(new Date());
   const cards = [{ title: 'No laboratório', sub: 'Acompanhando a produção', icon: 'lab', color: 'blue' }, { title: 'Recebidas na clínica', sub: 'Prontas para a próxima etapa', icon: 'box', color: 'green' }, { title: 'Em revisão', sub: 'Atenção aos retornos', icon: 'clock', color: 'amber' }, { title: 'Entregues ao paciente', sub: 'Cuidado concluído', icon: 'check', color: 'purple' }];
