@@ -49,3 +49,7 @@ As tabelas privadas têm RLS sem políticas públicas e sem grants para clientes
 ## Operação
 
 Nunca registre senha, código em texto puro, token de sessão ou chave privilegiada em logs. Códigos em texto puro aparecem apenas no retorno de sua geração e na entrega direta à pessoa autorizada. Dados de teste usados na validação são sintéticos e removidos ao final. Esta versão não persiste informações médicas no repositório.
+
+## Carga do painel
+
+A consulta do perfil inclui o nome da clínica pelo vínculo do banco, sob as mesmas políticas de leitura de perfil e clínica. A Visão geral inicia em paralelo os indicadores por situação, a contagem anual e a consulta das unidades. As contagens de cada unidade começam assim que a lista de unidades chega.
