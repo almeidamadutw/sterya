@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { EmptyState } from '@/components/empty-state';
-import { materialSearch, catalogPage, catalogPageSize, materialBase, materialQuantity, orderBase, validMaterialId } from '@/lib/materials';
+import { catalogPage, catalogPageSize, materialBase, materialQuantity, orderBase } from '@/lib/materials';
+import { stockFilters, stockQuery } from '@/lib/report-queries';
 
 export const metadata = { title: 'Materiais | STERYA' };
+
 type SearchValue = string | string[] | undefined;
 type Category = { id: string; name: string };
 type Material = { id: string; code: string; name: string; variant: string; category_id: string; source_label: string | null; review_note: string | null; purchase_unit: string | null };
@@ -13,14 +15,10 @@ export default async function Materials({ searchParams }: {
   searchParams: Promise<{ q?: SearchValue; category?: SearchValue; page?: SearchValue; unidade?: SearchValue }>;
 }) {
   const params = await searchParams;
-  const q = single(params.q).trim().slice(0, 120);
-  const candidate = single(params.category);
-  const category = validMaterialId(candidate) ? candidate : '';
+  const { q, category } = stockFilters(single(params.q), single(params.category));
   const page = catalogPage(single(params.page));
   const supabase = await createClient();
-  let query = supabase.from('materials').select('id,code,name,variant,category_id,source_label,review_note,purchase_unit', { count: 'exact' }).eq('active', true).order('name').order('variant');
-  if (category) query = query.eq('category_id', category);
-  if (q) query = query.like('search_text', `%${materialSearch(q)}%`);
+  const query = stockQuery(supabase, { q, category });
   const [materialsResult, categoriesResult, totalResult, importResult, unitsResult] = await Promise.all([
     query.range((page - 1) * catalogPageSize, page * catalogPageSize - 1),
     supabase.from('material_categories').select('id,name').order('sort_order'),
@@ -42,18 +40,19 @@ export default async function Materials({ searchParams }: {
     .in('material_id', materials.map(material => material.id)) : null;
   const balances = new Map((stock?.data ?? []).map(item => [item.material_id + ':' + item.unit_id, item.quantity]));
   const failed = Boolean(materialsResult.error || categoriesResult.error || totalResult.error || unitsResult.error || stock?.error);
-  const linkToPage = (next: number) => {
+  const linkToPage = (next: number, path = materialBase) => {
     const search = new URLSearchParams();
     if (q) search.set('q', q);
     if (category) search.set('category', category);
     if (unitId) search.set('unidade', unitId);
     if (next > 1) search.set('page', String(next));
-    return `/painel/materiais${search.size ? `?${search.toString()}` : ''}`;
+    return `${path}${search.size ? `?${search.toString()}` : ''}`;
   };
 
   return <>
     <div className="page-heading"><div><span className="eyebrow">ORGANIZAÇÃO DO SETOR</span><h1>Materiais<span className="heading-dot">.</span></h1><p>Catálogo, estoque por unidade e pedidos de compra.</p></div>
       <div className="material-toolbar">
+        <a download className="button secondary" href={linkToPage(1, "/painel/relatorios/estoque")}>Baixar PDF do estoque</a>
         <Link className="button secondary" href={orderBase + unitSearch}>Pedidos de compra</Link>
         <Link className="button primary" href={materialBase + '/novo'}>Novo material</Link>
       </div>

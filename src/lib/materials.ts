@@ -55,3 +55,10 @@ export type PurchaseItem = {
 export function orderPriorityLabel(priority: number) {
   return orderPriorities.find(option => option.value === priority)?.label ?? 'Normal';
 }
+
+export function orderNextStep(state: string, role: string) {
+  if (state === 'solicitado') return role === 'gestor' ? 'Revisar solicitação' : 'Aguardar aprovação';
+  if (state === 'aprovado') return 'Preparar ou registrar compra';
+  if (state === 'comprado') return 'Conferir entrega';
+  return 'Ver histórico';
+}

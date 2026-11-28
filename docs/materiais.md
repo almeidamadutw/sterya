@@ -56,3 +56,9 @@ Abra **Compras e estoque** no menu. Os atalhos levam ao catálogo com saldos, à
 Quando a gestão aprovar um pedido, abra **Comprar pelo iFood** no detalhe dele e selecione **Copiar lista aprovada**. A lista inclui nome, variante, quantidade e unidade de medida do pedido. Se a cópia automática estiver bloqueada pelo navegador, a tela exibe o texto para cópia manual.
 
 Cole o link de compartilhamento do mercado para abri-lo em outra aba ou use **Buscar mercado no iFood**. Confira o endereço da unidade, os produtos, os preços e o frete no iFood e finalize a compra por lá. Volte ao STERYA para registrar o código e, quando a entrega chegar, confirme as quantidades recebidas.
+
+## Relatórios de estoque e pedidos
+
+Na lista de **Materiais**, aplique a pesquisa, o grupo e a unidade desejados. **Baixar PDF do estoque** inclui todas as páginas do catálogo filtrado, com código, material, versão, grupo e saldo das unidades exibidas. Um saldo ainda não lançado aparece por extenso. Zero representa um saldo registrado.
+
+Em **Compras e estoque**, selecione a unidade, a situação e a prioridade, clique em **Filtrar** e depois em **Baixar PDF dos pedidos**. No atalho **Recebimentos**, o PDF usa a mesma seleção de pedidos que aguardam entrega. Cada pedido traz os seus itens, as quantidades pedidas, recebidas e pendentes, o solicitante, a próxima ação e a data. Suporte, gestão e equipe têm acesso aos dois relatórios.

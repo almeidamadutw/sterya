@@ -140,3 +140,7 @@ Cada evento relevante deve registrar: ID da peça, evento/status anterior e novo
 ## 13. Não confundir protótipo com implementação
 
 A beta descrita em `docs/beta.md` ainda usa dados fictícios e simulação no navegador. Já foram implantados em 25/11/2026 o **cadastro manual real de peças**, as **movimentações persistentes com auditoria e estorno**, a **visão de peças por laboratório com RLS**, a **etiqueta 50 × 30 mm imprimível via navegador** (três datas) e o **catálogo real de materiais por especialidade**. A atualização de 27/11/2026 acrescenta o catálogo de preços fixos para consulta interna. O login operacional de cada laboratório ainda exige a emissão de seus códigos pela gestão, e a impressão física depende de teste com a Ablemark. Seguem pendentes a edição completa de peças, a criação automática de peças via Clinicorp, a definição de valor por peça ou etapa, os tetos mensais, a integração com o LYRVA e os testes da interface publicada.
+
+## Relatório da fila de peças
+
+Em **Peças**, clique em **Baixar PDF das peças**. O relatório reúne todas as peças visíveis ao perfil, inclusive as que vêm depois dos 200 primeiros registros da tela, em ordem de prioridade e próxima consulta. Mostra paciente, referência, procedimento e região, laboratório, situação, próxima consulta e prazo esperado. Para a equipe interna, inclui também unidade e caixa. O perfil de laboratório recebe apenas a fila atribuída a ele. Na ficha individual, **Imprimir etiqueta 50 × 30 mm** continua disponível para a identificação física.

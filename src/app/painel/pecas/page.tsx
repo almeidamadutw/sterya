@@ -7,6 +7,8 @@ import { cabinetBoxLabel } from '@/lib/piece-cabinet';
 import { ClinicorpPiecePatient } from '@/components/clinicorp-piece-patient';
 import { createPiece } from '@/app/actions/pieces';
 
+import { pieceQuery } from '@/lib/report-queries';
+
 export const metadata = { title: 'Peças | STERYA' };
 
 const displayAppointment = (date: string | null) => date
@@ -18,7 +20,7 @@ export default async function Pieces({ searchParams }: { searchParams: Promise<{
   const isLab = actor.role === 'laboratorio';
   const supabase = await createClient();
   const [pieceResult, labResult, unitResult] = await Promise.all([
-    supabase.from('pieces').select('id,unit_id,patient_name,procedure_type,teeth,arch,reference,cabinet_box,status,laboratory_id,priority,next_appointment_at,expected_at').order('priority', { ascending: false }).order('next_appointment_at', { ascending: true, nullsFirst: false }).limit(200),
+    pieceQuery(supabase).limit(200),
     supabase.from('laboratories').select('id,name,active').order('name'),
     isLab ? Promise.resolve({data: [] as { id: string, name: string }[]}) : supabase.from('units').select('id,name').order('name')
   ]);
@@ -28,7 +30,7 @@ export default async function Pieces({ searchParams }: { searchParams: Promise<{
   const unitById = new Map(units.map(unit => [unit.id, unit.name]));
   const params = await searchParams;
   return <>
-    <div className="page-heading"><div><span className="eyebrow">CONTROLE PROTÉTICO</span><h1>Peças<span className="heading-dot">.</span></h1><p>Uma peça por registro, com histórico individual e recebimento confirmado.</p></div></div>
+    <div className="page-heading"><div><span className="eyebrow">CONTROLE PROTÉTICO</span><h1>Peças<span className="heading-dot">.</span></h1><p>Uma peça por registro, com histórico individual e recebimento confirmado.</p></div><a download className="button secondary" href="/painel/relatorios/pecas">Baixar PDF das peças</a></div>
     {params.erro && <p className="notice error" role="alert">
       {params.erro === 'justificativa' ? 'Informe o motivo para trocar o laboratório sugerido.' :
         params.erro === 'observacao' ? 'Reduza a observação para salvar a justificativa junto com a peça.' :

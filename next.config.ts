@@ -1,5 +1,6 @@
 import type { NextConfig } from 'next';
 const config: NextConfig = {
+  serverExternalPackages: ['pdfmake'],
   poweredByHeader: false,
   // These are PUBLIC client settings, protected by grants and RLS. They let
   // the first preview run after Git import. Environment variables override
